@@ -133,7 +133,7 @@ perform_mr_analysis <- function(dat) {
             mr_pleo <- mr_pleiotropy_test(dat)
         }, error = function(e) {})
 
-        if (nrow()(mr_pleo)>0) {
+        if (nrow((mr_pleo)>0)) {
             mr_pleo_df <<- rbind.fill(mr_pleo_df, mr_pleo)
         }
 
@@ -302,6 +302,7 @@ for (exposure in sort(unique(exposure_df$id))) {
         }
         }
 
+if (nrow(mr_pleo)>0)
 
 
 
@@ -319,4 +320,6 @@ write.csv(mendelianpipeline_mrresult, glue('{prefix}_MendelianPipelineTest.csv')
 write.csv(MendelianRandomization_df, glue('{prefix}_MendelianRandomization_AllTest.csv'),row.names = FALSE)
 write.csv(mr_presso_df, glue('{prefix}_MendelianRandomization_Presso_Test.csv'),row.names = FALSE)
 write.csv(mr_ivw_delta_df, glue('{prefix}_MendelianRandomization_IVW_Delta_Test.csv'),row.names = FALSE)
+
+##########
 
