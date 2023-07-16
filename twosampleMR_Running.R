@@ -33,8 +33,6 @@ library(MendelianRandomization, lib.loc = '/home/jjohn1/modulefiles/mrpipeline')
 load("/home/jjohn1/modulefiles/R4.1_modules/rf.rdata")
 
 
-prefix="cis_exposure"
-
 exposure_file<-"/edgehpc/dept/human_genetics/users/jjohn1/Cis_Trans/1kg_clump/Final_Results/All_significannt_cis_exposure_AfterQC_LDclumping.csv"
 
 
@@ -50,8 +48,8 @@ methodlist_1<-c("mr_wald_ratio","mr_two_sample_ml","mr_egger_regression","mr_egg
 methodlist_2<-c("mr_wald_ratio","mr_two_sample_ml","mr_egger_regression","mr_egger_regression_bootstrap","mr_simple_median","mr_weighted_median","mr_penalised_weighted_median","mr_ivw","mr_ivw_mre","mr_ivw_fe","mr_simple_mode","mr_weighted_mode","mr_weighted_mode_nome","mr_simple_mode_nome","mr_sign","mr_uwr")
 methodlist_3<-c("mr_wald_ratio","mr_two_sample_ml","mr_egger_regression","mr_egger_regression_bootstrap","mr_simple_median","mr_weighted_median","mr_penalised_weighted_median","mr_ivw")
 
-heterogenoty_list<-c("mr_two_sample_ml","mr_egger_regression","mr_ivw","mr_ivw_radial","mr_uwr")
-
+heterogenoty_list_1<-c("mr_two_sample_ml","mr_egger_regression","mr_ivw","mr_ivw_radial","mr_uwr")
+heterogenoty_list_2<-c("mr_two_sample_ml","mr_egger_regression","mr_ivw","mr_uwr")
 
 ##Format Exposure
 format_exposure <- function(selecteed_df) {
@@ -93,7 +91,7 @@ perform_mr_analysis <- function(dat) {
         tryCatch({
             mr_res <- mr(dat, method_list = methodlist_1)
             mr_res <- generate_odds_ratios(mr_res)
-            mr_res_df <<- rbind(mr_res_df, mr_res)
+            mr_res_df <<- rbind.fill(mr_res_df, mr_res)
         }, error = function(e) {
             # Handle the error or perform any desired action
         })
@@ -102,7 +100,7 @@ perform_mr_analysis <- function(dat) {
         tryCatch({
             mr_res <- mr(dat, method_list = methodlist_2)
             mr_res <- generate_odds_ratios(mr_res)
-            mr_res_df <<- rbind(mr_res_df, mr_res)
+            mr_res_df <<- rbind.fill(mr_res_df, mr_res)
         }, error = function(e) {
             # Handle the error or perform any desired action
         })}
@@ -111,33 +109,40 @@ perform_mr_analysis <- function(dat) {
         tryCatch({
             mr_res <- mr(dat, method_list = methodlist_3)
             mr_res <- generate_odds_ratios(mr_res)
-            mr_res_df <<- rbind(mr_res_df, mr_res)
+            mr_res_df <<- rbind.fill(mr_res_df, mr_res)
         }, error = function(e) {
             # Handle the error or perform any desired action
         })}
 
         tryCatch({
-            mr_het <- mr_heterogeneity(dat, method_list = heterogenoty_list)
+            mr_het <- mr_heterogeneity(dat, method_list = heterogenoty_list_1)
         }, error = function(e) {})
 
-        if (!is.null(mr_het)) {
-            mr_het_df <<- rbind(mr_het_df, mr_het)
+        if (nrow(mr_het)==0) {
+        tryCatch({
+            mr_het <- mr_heterogeneity(dat, method_list = heterogenoty_list_2)
+        }, error = function(e) {
+            # Handle the error or perform any desired action
+        })}
+
+        if (nrow(mr_het)>0) {
+            mr_het_df <<- rbind.fill(mr_het_df, mr_het)
         }
 
        tryCatch({
             mr_pleo <- mr_pleiotropy_test(dat)
         }, error = function(e) {})
 
-        if (!is.null(mr_pleo)) {
-            mr_pleo_df <<- rbind(mr_pleo_df, mr_pleo)
+        if (nrow()(mr_pleo)>0) {
+            mr_pleo_df <<- rbind.fill(mr_pleo_df, mr_pleo)
         }
 
         tryCatch({
             mr_direction <- directionality_test(dat)
         }, error = function(e) {})
 
-        if (!is.null(mr_direction)) {
-            direction_df <<- rbind(direction_df, mr_direction)
+        if (nrow(mr_direction)>0) {
+            direction_df <<- rbind.fill(direction_df, mr_direction)
         }}
 
 
@@ -151,13 +156,13 @@ perform_single_variant_mr_analysis <- function(dat) {
             mr_single_wald_ratio <- mr_singlesnp(dat, parameters = default_parameters(), single_method = "mr_wald_ratio")
             }, error = function(e) {})
 
-        if ( !is.null(mr_single_wald_ratio) || nrow(mr_res) != 0) {wald_df <<- rbind(wald_df, mr_single_wald_ratio)}
+        if ( !is.null(mr_single_wald_ratio) || nrow(mr_res) != 0) {wald_df <<- rbind.fill(wald_df, mr_single_wald_ratio)}
 
         tryCatch({
             mr_single_meta_fixed <- mr_singlesnp(dat, parameters = default_parameters(), single_method = "mr_meta_fixed")
         }, error = function(e) {})
 
-        if ( !is.null(mr_single_meta_fixed) || nrow(mr_res) != 0  ) { meta_fixed_df <<- rbind(meta_fixed_df, mr_single_meta_fixed)}
+        if ( !is.null(mr_single_meta_fixed) || nrow(mr_res) != 0  ) { meta_fixed_df <<- rbind.fill(meta_fixed_df, mr_single_meta_fixed)}
             }
 
 
@@ -183,7 +188,7 @@ if ("V1" %in% colnames(exposure_df)) { exposure_df <- exposure_df[, -"V1", with 
 if ("X" %in% unique(exposure_df$seqnames)) { exposure_df<-exposure_df[exposure_df$seqnames!="X"] }
 
 
-exposure<-"VMO1"
+exposure<-"ENPP2"
 
 
 for (exposure in sort(unique(exposure_df$id))) {
@@ -220,15 +225,15 @@ for (exposure in sort(unique(exposure_df$id))) {
         if (nrow(formated_outcomedf) > 0) {
             dat <- harmonise_data(exposure_dat = formated_selected_exposure_df, outcome_dat = formated_outcomedf)
         } else {
-            no_outcome_dat_df <- rbind(no_outcome_dat_df, formated_selected_exposure_df)
+            no_outcome_dat_df <- rbind.fill(no_outcome_dat_df, formated_selected_exposure_df)
         }
         
         if (nrow(dat) > 0) {
             results <- perform_mr_analysis(dat)
-            harmonised_df <<- rbind(harmonised_df, dat)
+            harmonised_df <<- rbind.fill(harmonised_df, dat)
             perform_single_variant_mr_analysis(dat)
             mr_res <- do_mr(dat, f_cutoff = 1, all_wr = TRUE, verbose = TRUE)
-            mendelianpipeline_mrresult <<- rbind(mendelianpipeline_mrresult, mr_res)
+            mendelianpipeline_mrresult <<- rbind.fill(mendelianpipeline_mrresult, mr_res)
         }
         
         if (nrow(dat) > 0) {
@@ -245,7 +250,7 @@ for (exposure in sort(unique(exposure_df$id))) {
             df2$outcome <- dat$outcome[1]
             df2$exposure <- dat$exposure[1]
             df2$SNPs <- paste(unique(dat$SNP), collapse = ",")
-            MendelianRandomization_df <<- rbind(MendelianRandomization_df, df2)
+            MendelianRandomization_df <<- rbind.fill(MendelianRandomization_df, df2)
             }
         }
         
@@ -265,7 +270,7 @@ for (exposure in sort(unique(exposure_df$id))) {
             presso$GlobalTest_Pvalue <- mr_presso[[1]]$`MR-PRESSO results`$`Global Test`$Pvalue
             presso$exposure <- attributes(mr_presso)$exposure
             presso$outcome <- attributes(mr_presso)$outcome
-            mr_presso_df <<- rbind(mr_presso_df, presso)
+            mr_presso_df <<- rbind.fill(mr_presso_df, presso)
             }
         }
         
@@ -276,7 +281,7 @@ for (exposure in sort(unique(exposure_df$id))) {
             }, error = function(e) {})
             
             if (typeof(t) == "S4") {
-            mr_ivw_delta_df <<- rbind(mr_ivw_delta_df, data.frame(
+            mr_ivw_delta_df <<- rbind.fill(mr_ivw_delta_df, data.frame(
                 Model = t@Model,
                 Outcome = t@Outcome,
                 Penalized = t@Penalized,
@@ -299,6 +304,9 @@ for (exposure in sort(unique(exposure_df$id))) {
 
 
 
+
+prefix="cis_exposure"
+
 write.csv(no_outcome_dat_df, glue('{prefix}_Novariants_In_Outcome_GWAS.csv'), row.names = FALSE)
 write.csv(harmonised_df, glue('{prefix}_Harmonised_Exposure_Outcome.csv'),row.names = FALSE)
 write.csv(mr_res_df, glue('{prefix}_TwoSampleMR_Analysis_Multiple_MR_Test.csv'),row.names = FALSE)
@@ -311,3 +319,4 @@ write.csv(mendelianpipeline_mrresult, glue('{prefix}_MendelianPipelineTest.csv')
 write.csv(MendelianRandomization_df, glue('{prefix}_MendelianRandomization_AllTest.csv'),row.names = FALSE)
 write.csv(mr_presso_df, glue('{prefix}_MendelianRandomization_Presso_Test.csv'),row.names = FALSE)
 write.csv(mr_ivw_delta_df, glue('{prefix}_MendelianRandomization_IVW_Delta_Test.csv'),row.names = FALSE)
+
