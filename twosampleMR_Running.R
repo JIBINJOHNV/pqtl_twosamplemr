@@ -305,9 +305,6 @@ for (exposure in sort(unique(exposure_df$id))) {
 if (nrow(mr_pleo)>0)
 
 
-
-prefix="cis_exposure"
-
 write.csv(no_outcome_dat_df, glue('{prefix}_Novariants_In_Outcome_GWAS.csv'), row.names = FALSE)
 write.csv(harmonised_df, glue('{prefix}_Harmonised_Exposure_Outcome.csv'),row.names = FALSE)
 write.csv(mr_res_df, glue('{prefix}_TwoSampleMR_Analysis_Multiple_MR_Test.csv'),row.names = FALSE)
