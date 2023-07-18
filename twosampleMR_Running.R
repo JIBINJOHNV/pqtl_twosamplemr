@@ -298,8 +298,45 @@ for (exposure in sort(unique(exposure_df$id))) {
                 Pvalue = t@Pvalue,
                 RSE = t@RSE
             ))
-            }
-        }
+            }}
+
+        res_single2<-data.frame()
+        T1<-data.frame()
+        T2<-data.frame()
+        T<-data.frame()
+        bratish<-data.frame()
+        all_bratish<-data.frame()
+        bratish_ivwdelta<-data.frame()
+        p2<-data.frame()
+
+        res_single2 <- mr_singlesnp(dat,all_method =methodlist_2)
+        res_single2<-res_single2[res_single2$SNP!="All - Unweighted regression",]
+        mr_res <- do_mr(dat, f_cutoff = 1, all_wr = TRUE, verbose = TRUE)
+        T1<-res_single2[c(1),c(1,2,3,4,5)]
+        T2<-mr_res[mr_res$method=="Inverse variance weighted",][,c(5,8,9,10)]
+        T<- cbind(T1,T2)
+        colnames(T)<-colnames(res_single2)
+        T$SNP<-"Mr_Pipeline_Inverse variance weighted"
+
+        
+        tryCatch({bratish<-cbind(T1,as.data.frame(MRAllObject_all@Values)[,c(1,2,3,6)])}, error = function(e) {})
+        if (nrow(bratish)>0){
+                colnames(bratish)<-colnames(T)
+                bratish$SNP <- paste("All_British_", bratish$SNP, sep = "")
+                }
+
+        tryCatch({  bratish_ivwdelta<-cbind(T1,data.frame(SNP = "All_British_IVWtest_Delta",b = t@Estimate,se = t@StdError,p = t@Pvalue))   }, error = function(e) {})
+        if (nrow(bratish_ivwdelta)>0){
+                all_bratish<-rbind(bratish,bratish_ivwdelta)
+                all_bratish <- all_bratish[!grepl("intercept", all_bratish$SNP), ]
+                p2 <- mr_forest_plot(rbind(res_single2,T,all_bratish))
+                } else {
+                    p2 <- mr_forest_plot(rbind(res_single2,T))
+                }
+
+        ggsave(p2[[1]], file = glue("{exposure}_ForestPlot.pdf"), width = 7, height = 7)
+
+    
         }
 
 prefix="cis_exposure"
