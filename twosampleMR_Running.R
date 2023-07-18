@@ -213,7 +213,7 @@ for (exposure in sort(unique(exposure_df$id))) {
         }
         
         if (nrow(formated_selected_exposure_df) > 0) {
-            formated_selected_exposure_df <- calc_f_stat(formated_selected_exposure_df, f_cutoff = 1)
+            formated_selected_exposure_df <- calc_f_stat(formated_selected_exposure_df, f_cutoff = 0)
         }
         
         tryCatch({
