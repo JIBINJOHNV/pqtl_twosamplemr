@@ -44,3 +44,51 @@ for file in fdf['SampleNames'].unique():
         --json params.txt \
         --id {ID} ''' )
     os.system(f'tabix -f -p vcf  {path}/{file.split("/")[-1][:-7]}.vcf.gz')
+
+#paramsdict={"chr_col": 0,
+#    "pos_col": 1,
+#    "snp_col": 2,
+#    "ea_col": 3,
+#    "oa_col": 4,
+#    "beta_col": 5,
+#    "se_col": 6,
+#    "ncontrol_col": 7,
+#    "pval_col": 8,
+#    "eaf_col": 9,
+#    "imp_info_col":10,
+#    "delimiter": "\t",
+#    "header": "true",
+#    "build": "GRCh38"
+#    }
+#
+#with open('params.txt', 'w') as f:
+#  json.dump(paramsdict, f)
+
+#paramsdict={"chr_col": 0,
+#    "pos_col": 2,
+#    "snp_col": 1,
+#    "ea_col": 3,
+#    "oa_col": 4,
+#    "beta_col": 8,
+#    "se_col": 9,
+#    "ncontrol_col": 12,
+#    "ncase_col":11,
+#    "pval_col": 10,
+#    "eaf_col": 5,
+#    "imp_info_col":7,
+#    "delimiter": "\t",
+#    "header": "true",
+#    "build": "GRCh37"}
+
+
+
+CrossMap.py vcf --compress /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/GRCh37_to_GRCh38.chain PGC3_SCZ_wave3.european.autosome.public.v3.vcf.gz \
+            /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/Homo_sapiens.GRCh38.dna.primary_assembly.fa out_vcf
+
+
+bcftools annotate --threads  10 \
+    -a /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/GCF_000001405_cleaed.40_Msplited.vcf.gz -c ID \
+   -o PGC3_SCZ_wave3.european.autosome.public.v3_hg38_rsid156.vcf.gz \
+   -O z PGC3_SCZ_wave3.european.autosome.public.v3_hg38.vcf.gz 
+
+
