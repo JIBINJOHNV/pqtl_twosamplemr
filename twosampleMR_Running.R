@@ -191,7 +191,7 @@ if ("X" %in% unique(exposure_df$seqnames)) { exposure_df<-exposure_df[exposure_d
 exposure<-"ENPP2"
 
 
-for (exposure in sort(unique(exposure_df$id))) {
+for (exposure in sort(unique(exposure_df$id)) ) {
         formated_outcomedf <- data.frame()
         formated_selected_exposure_df <- data.frame()
         formated_outcomedf <- data.frame()
@@ -201,33 +201,33 @@ for (exposure in sort(unique(exposure_df$id))) {
         results <- data.frame()
         mr_res <- data.frame()
         dat2 <-  data.frame()
-        
+
         print(exposure)
-        
+
         tryCatch({
             exposure_selected_df <- exposure_df[exposure_df$id == exposure, ]
         }, error = function(e) {})
-        
+
         if (nrow(exposure_selected_df) > 0) {
             formated_selected_exposure_df <- format_exposure(exposure_selected_df)
         }
-        
+
         if (nrow(formated_selected_exposure_df) > 0) {
-            formated_selected_exposure_df <- calc_f_stat(formated_selected_exposure_df, f_cutoff = 0)
+            formated_selected_exposure_df <- calc_f_stat(formated_selected_exposure_df, f_cutoff = 1)
         }
-        
+
         tryCatch({
             if (nrow(formated_selected_exposure_df) > 0) {
             formated_outcomedf <- format_outcome(outcomevcf, outcomevcf_index, formated_selected_exposure_df, dbfile)
             }
         }, error = function(e) {})
-        
+
         if (nrow(formated_outcomedf) > 0) {
             dat <- harmonise_data(exposure_dat = formated_selected_exposure_df, outcome_dat = formated_outcomedf)
         } else {
             no_outcome_dat_df <- rbind.fill(no_outcome_dat_df, formated_selected_exposure_df)
         }
-        
+
         if (nrow(dat) > 0) {
             results <- perform_mr_analysis(dat)
             harmonised_df <<- rbind.fill(harmonised_df, dat)
@@ -235,17 +235,17 @@ for (exposure in sort(unique(exposure_df$id))) {
             mr_res <- do_mr(dat, f_cutoff = 1, all_wr = TRUE, verbose = TRUE)
             mendelianpipeline_mrresult <<- rbind.fill(mendelianpipeline_mrresult, mr_res)
         }
-        
+
         if (nrow(dat) > 0) {
             dat2 <- dat_to_MRInput(dat)
             tryCatch({
             MRAllObject_all <- MendelianRandomization::mr_allmethods(dat2[[1]], method = "all")
             }, error = function(e) {})
-            
+
             tryCatch({
             df2 <- as.data.frame(MRAllObject_all@Values)
             }, error = function(e) {})
-            
+
             if (nrow(df2) > 0) {
             df2$outcome <- dat$outcome[1]
             df2$exposure <- dat$exposure[1]
@@ -253,18 +253,18 @@ for (exposure in sort(unique(exposure_df$id))) {
             MendelianRandomization_df <<- rbind.fill(MendelianRandomization_df, df2)
             }
         }
-        
+
         if (nrow(dat) > 0) {
             mr_presso <- data.frame()
             presso <- data.frame()
             tryCatch({
             mr_presso <- run_mr_presso(dat, NbDistribution = 1000, SignifThreshold = 0.05)
             }, error = function(e) {})
-            
+
             tryCatch({
             presso <- mr_presso[[1]]$`Main MR results`
             }, error = function(e) {})
-            
+
             if (nrow(presso) > 0) {
             presso$RSSobs <- mr_presso[[1]]$`MR-PRESSO results`$`Global Test`$RSSobs
             presso$GlobalTest_Pvalue <- mr_presso[[1]]$`MR-PRESSO results`$`Global Test`$Pvalue
@@ -273,13 +273,13 @@ for (exposure in sort(unique(exposure_df$id))) {
             mr_presso_df <<- rbind.fill(mr_presso_df, presso)
             }
         }
-        
+
         if (nrow(dat) > 0) {
             t <- data.frame()
             tryCatch({
             t <- MendelianRandomization::mr_ivw(dat2[[1]], weights = "delta", distribution = "normal")
             }, error = function(e) {})
-            
+
             if (typeof(t) == "S4") {
             mr_ivw_delta_df <<- rbind.fill(mr_ivw_delta_df, data.frame(
                 Model = t@Model,
@@ -298,46 +298,12 @@ for (exposure in sort(unique(exposure_df$id))) {
                 Pvalue = t@Pvalue,
                 RSE = t@RSE
             ))
-            }}
-
-        res_single2<-data.frame()
-        T1<-data.frame()
-        T2<-data.frame()
-        T<-data.frame()
-        bratish<-data.frame()
-        all_bratish<-data.frame()
-        bratish_ivwdelta<-data.frame()
-        p2<-data.frame()
-
-        res_single2 <- mr_singlesnp(dat,all_method =methodlist_2)
-        res_single2<-res_single2[res_single2$SNP!="All - Unweighted regression",]
-        mr_res <- do_mr(dat, f_cutoff = 1, all_wr = TRUE, verbose = TRUE)
-        T1<-res_single2[c(1),c(1,2,3,4,5)]
-        T2<-mr_res[mr_res$method=="Inverse variance weighted",][,c(5,8,9,10)]
-        T<- cbind(T1,T2)
-        colnames(T)<-colnames(res_single2)
-        T$SNP<-"Mr_Pipeline_Inverse variance weighted"
-
-        
-        tryCatch({bratish<-cbind(T1,as.data.frame(MRAllObject_all@Values)[,c(1,2,3,6)])}, error = function(e) {})
-        if (nrow(bratish)>0){
-                colnames(bratish)<-colnames(T)
-                bratish$SNP <- paste("All_British_", bratish$SNP, sep = "")
-                }
-
-        tryCatch({  bratish_ivwdelta<-cbind(T1,data.frame(SNP = "All_British_IVWtest_Delta",b = t@Estimate,se = t@StdError,p = t@Pvalue))   }, error = function(e) {})
-        if (nrow(bratish_ivwdelta)>0){
-                all_bratish<-rbind(bratish,bratish_ivwdelta)
-                all_bratish <- all_bratish[!grepl("intercept", all_bratish$SNP), ]
-                p2 <- mr_forest_plot(rbind(res_single2,T,all_bratish))
-                } else {
-                    p2 <- mr_forest_plot(rbind(res_single2,T))
-                }
-
-        ggsave(p2[[1]], file = glue("{exposure}_ForestPlot.pdf"), width = 7, height = 7)
-
-    
+            }
         }
+        }
+
+
+
 
 prefix="cis_exposure"
 
@@ -353,4 +319,3 @@ write.csv(mendelianpipeline_mrresult, glue('{prefix}_MendelianPipelineTest.csv')
 write.csv(MendelianRandomization_df, glue('{prefix}_MendelianRandomization_AllTest.csv'),row.names = FALSE)
 write.csv(mr_presso_df, glue('{prefix}_MendelianRandomization_Presso_Test.csv'),row.names = FALSE)
 write.csv(mr_ivw_delta_df, glue('{prefix}_MendelianRandomization_IVW_Delta_Test.csv'),row.names = FALSE)
-
