@@ -43,3 +43,6 @@ for file in fdf['SampleNames'].unique():
         --json params.txt \
         --id {ID} ''' )
     os.system(f'tabix -f -p vcf  {path}/{file.split("/")[-1][:-7]}.vcf.gz')
+
+##VCF file locateed in /edgehpc/dept/human_genetics/users/jjohn1/Pqtl_Summarystatistics/Biogen/VcfFiles
+
