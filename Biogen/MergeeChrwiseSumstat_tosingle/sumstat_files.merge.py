@@ -34,3 +34,6 @@ for UniqueID in files_df['UniqueID'].unique():
     result_df.to_csv(f'discovery_RS2_{gene_df.loc[Index, "GeneSymbol"]}:{gene_df.loc[Index, "UNIPROT_ID"]}:{gene_df.loc[Index, "CAtegary"]}.tsv', sep="\t")
     os.system(f'gzip discovery_RS2_{gene_df.loc[Index, "GeneSymbol"]}:{gene_df.loc[Index, "UNIPROT_ID"]}:{gene_df.loc[Index, "CAtegary"]}.tsv')
     print(result_df)
+
+
+#GWAS summary statistics located in /edgehpc/dept/compbio/human_genetics/users/bsun/UKB_PPP_pQTLs/analysis_v2/interim/UKBPPP_GWAS_v2/RS2/
