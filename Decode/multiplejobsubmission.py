@@ -56,6 +56,30 @@ for i in range(0,50):
 
 
 
+#################### Trans NoMHC Unique Exposure MR analysis multiple job
+import pandas as pd
+import numpy as np
+import os
+
+basedir=os.getcwd()+"/"
+
+# Save each part to separate files
+for i in range(0,50):
+    Dir=f"{basedir}Part{i}/"
+    os.system(f"cp Decode_TransExposure_NoMHC_Unique_twosampleMR_Running.R TransExposure_NoMHC_Unique_mr_analysis_sbatch_command.sh {Dir}")
+    os.chdir(Dir)
+    df=pd.read_csv("All_significannt_trans_exposure_AfterQC_LDclumping_MHCRemoval.csv")
+    count_df=df.groupby("ID")["seqnames"].count().reset_index()
+    count_uniq=count_df[count_df["seqnames"]==1]
+    count_uniq=count_uniq.rename(columns={'seqnames':"Count"})
+    df=pd.merge(df,count_uniq,on="ID").drop("Count",axis=1)
+    df.to_csv("All_significannt_trans_exposure_AfterQC_LDclumping_NoMHC_Unique.csv")
+    os.system(f"sbatch TransExposure_NoMHC_Unique_mr_analysis_sbatch_command.sh ")
+    os.chdir(basedir)
+
+
+
+
 
 ################## Meerge results from above job
 import os,glob
