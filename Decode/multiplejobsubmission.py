@@ -39,7 +39,6 @@ for i in range(0,50):
     os.chdir(basedir)
 
 #################### Trans Exposure MR analysis multiple job
-
 import pandas as pd
 import numpy as np
 import os
@@ -53,6 +52,18 @@ for i in range(0,50):
     os.chdir(basedir)
 
 
+#################### Trans Exposure MR NNoMHC analysis multiple job
+import pandas as pd
+import numpy as np
+import os
+basedir=os.getcwd()+"/"
+# Save each part to separate files
+for i in range(0,50):
+    Dir=f"{basedir}Part{i}/"
+    os.system(f"cp Decode_TransExposure_NoMHC_twosampleMR_Running.R TransExposure_NoMHC_mr_analysis_sbatch_command.sh {Dir}")
+    os.chdir(Dir)
+    os.system(f"sbatch TransExposure_NoMHC_mr_analysis_sbatch_command.sh ")
+    os.chdir(basedir)
 
 
 
@@ -79,25 +90,23 @@ for i in range(0,50):
 
 
 
-
-
-################## Meerge results from above job
+################## Meerge results of cis_exposure_ MR analysis results
 import os,glob
 import pandas as pd
 
-Files=glob.glob("Part*/All_significannt_CisTransexposure_BeforeQC_LDclumping.csv")
-Folders=sorted([x.replace("/All_significannt_CisTransexposure_BeforeQC_LDclumping.csv","") for x in Files])
-Folders=[x for x in Folders  if x!='Part1']
-basedir=os.getcwd()+"/"
+unique_files=glob.glob("Part0/cis_exposure_*")
+unique_files=[x.split("/")[1] for x in unique_files ]
 
-SubmittedFolder=['Part0', 'Part10', 'Part11', 'Part12', 'Part13', 'Part14', 'Part15', 'Part16', 'Part2', 'Part23', 'Part24', 'Part25', 'Part26', 'Part27', 'Part28', 'Part29', 'Part3', 'Part30', 'Part31', 'Part4', 'Part42', 'Part43', 'Part44', 'Part45', 'Part46', 'Part47', 'Part48', 'Part49', 'Part5', 'Part6', 'Part7', 'Part8', 'Part9']
+for file in unique_files:
+    Files=glob.glob(f"Part*/{file}")
+    master_df=pd.DataFrame()
+    for part_file in Files:
+        part_file_df=pd.read_csv(part_file)
+        master_df=pd.concat([master_df,part_file_df])
+    master_df.to_csv(f"{file}",index=None)
+    
 
-for foder in Folders:
-    Dir=f"{basedir}{foder}/"
-    os.system(f"cp Decode_twosampleMR_Running.R mr_analysis_sbatch_command.sh {Dir}")
-    os.chdir(Dir)
-    os.system(f"sbatch mr_analysis_sbatch_command.sh ")
-    os.chdir(basedir)
+    
 
 
 
