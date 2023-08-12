@@ -66,10 +66,10 @@ path=os.getcwd()
 ID="BIP_PGC3_noukb"
 
 os.system(f'''python /edgehpc/dept/human_genetics/users/jjohn1/Software/gwas2vcf/main.py \
-    --out {path}/{filename}[:-3].vcf \
+    --out {path}/{filename[:-3]}.vcf \
     --data {path}/{filename[:-3]}.tsv \
     --ref /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/Homo_sapiens.GRCh37.dna.primary_assembly.fa \
     --json daner_bip_pgc3_params.txt \
     --id {ID} ''' )
 
-os.system(f'tabix -f -p vcf  {path}/{filename}[:-3].vcf.gz')
+os.system(f'tabix -f -p vcf  {path}/{filename[:-3]}.vcf.gz')
