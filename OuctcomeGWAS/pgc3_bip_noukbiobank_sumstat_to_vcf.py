@@ -53,7 +53,7 @@ paramsdict={"chr_col": 0,
     "imp_info_col":11,
     "delimiter": "\t",
     "header": "true",
-    "build": "GRCh38"
+    "build": "GRCh37"
     }
 
 with open('daner_bip_pgc3_params.txt', 'w') as f:
@@ -70,6 +70,6 @@ os.system(f'''python /edgehpc/dept/human_genetics/users/jjohn1/Software/gwas2vcf
     --data {path}/{filename[:-3]}.tsv \
     --ref /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/Homo_sapiens.GRCh37.dna.primary_assembly.fa \
     --json daner_bip_pgc3_params.txt \
-    --id {ID} ''' )
+    --id {ID} > {filename[:-3]}.error 2>&1 ''' )
 
 os.system(f'tabix -f -p vcf  {path}/{filename[:-3]}.vcf.gz')
