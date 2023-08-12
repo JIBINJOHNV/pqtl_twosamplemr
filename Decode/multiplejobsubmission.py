@@ -23,14 +23,13 @@ for i, split_df in enumerate(split_dfs):
     os.chdir(basedir)
 
 
-#################### MR analysis multiple job
+#################### Cis Exposure MR analysis multiple job
 
 import pandas as pd
 import numpy as np
 import os
 
 basedir=os.getcwd()+"/"
-
 # Save each part to separate files
 for i in range(0,50):
     Dir=f"{basedir}Part{i}/"
@@ -38,6 +37,24 @@ for i in range(0,50):
     os.chdir(Dir)
     os.system(f"sbatch mr_analysis_sbatch_command.sh ")
     os.chdir(basedir)
+
+#################### Trans Exposure MR analysis multiple job
+
+import pandas as pd
+import numpy as np
+import os
+basedir=os.getcwd()+"/"
+# Save each part to separate files
+for i in range(0,50):
+    Dir=f"{basedir}Part{i}/"
+    os.system(f"cp Decode_TransExposure_twosampleMR_Running.R TransExposure_mr_analysis_sbatch_command.sh {Dir}")
+    os.chdir(Dir)
+    os.system(f"sbatch TransExposure_mr_analysis_sbatch_command.sh ")
+    os.chdir(basedir)
+
+
+
+
 
 
 ################## Meerge results from above job
