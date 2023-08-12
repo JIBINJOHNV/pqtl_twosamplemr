@@ -1,13 +1,11 @@
 
+###Select Exposure and clumping
 import pandas as pd
 import numpy as np
 import os
 
-
 # Load your original DataFrame
 df = pd.read_csv("Decode_Proteins_TrnnscriptSTart_End_Hg38.csv")
-
-
 # Split the DataFrame into almost equal-sized parts
 split_dfs = np.array_split(df, 50)
 
@@ -22,6 +20,23 @@ for i, split_df in enumerate(split_dfs):
     os.system(f"sed s'|Decode_Proteins_TrnnscriptSTart_End_Hg38_Part1.csv|{Dir}Decode_Proteins_TrnnscriptSTart_End_Hg38_Part{i}.csv|' pQTL_Expsure_selection_clumping.R > {basedir}Part{i}/pQTL_Expsure_selection_clumping.R")
     os.chdir(Dir)
     os.system(f"sbatch sbatch_command.sh ")
+    os.chdir(basedir)
+
+
+#################### MR analysis multiple job
+
+import pandas as pd
+import numpy as np
+import os
+
+basedir=os.getcwd()+"/"
+
+# Save each part to separate files
+for i in range(0,50):
+    Dir=f"{basedir}Part{i}/"
+    os.system(f"cp mr_analysis_sbatch_command.sh  Decode_CisExposure_twosampleMR_Running.R {Dir}")
+    os.chdir(Dir)
+    os.system(f"sbatch mr_analysis_sbatch_command.sh ")
     os.chdir(basedir)
 
 
