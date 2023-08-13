@@ -106,8 +106,9 @@ for file in unique_files:
     master_df.to_csv(f"{file}",index=None)
 
 ## trans_exposure_TwoSampleMR_
-unique_files=glob.glob("Part0/trans_exposure_TwoSampleMR_*")
+unique_files=glob.glob("Part0/trans_exposure_*")
 unique_files=[x.split("/")[1] for x in unique_files ]
+unique_files=[x for x in unique_files if "MHC" not in x]
 
 for file in unique_files:
     Files=glob.glob(f"Part*/{file}")
