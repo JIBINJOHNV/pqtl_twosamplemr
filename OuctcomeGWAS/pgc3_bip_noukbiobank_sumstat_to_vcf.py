@@ -60,7 +60,6 @@ with open('daner_bip_pgc3_params.txt', 'w') as f:
   json.dump(paramsdict, f)
 
 
-
 path=os.getcwd()
 
 ID="BIP_PGC3_noukb"
@@ -73,3 +72,46 @@ os.system(f'''python /edgehpc/dept/human_genetics/users/jjohn1/Software/gwas2vcf
     --id {ID} > {filename[:-3]}.error 2>&1 ''' )
 
 os.system(f'tabix -f -p vcf  {path}/{filename[:-3]}.vcf.gz')
+
+
+os.system(f'''CrossMap.py vcf /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/GRCh37_to_GRCh38.chain {path}/{filename[:-3]}.vcf.gz \
+            /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/Homo_sapiens.GRCh38.dna.primary_assembly.fa {path}/{filename[:-3]}_GRCh38.vcf''')
+
+os.system(f"bcftools sort {path}/{filename[:-3]}_GRCh38.vcf | bgzip -c > {path}/{filename[:-3]}_GRCh38.vcf.gz")
+os.system(f'tabix -f -p vcf  {path}/{filename[:-3]}_GRCh38.vcf.gz')
+os.system("rm daner_bip_pgc3_nm_noukbiobank_GRCh38.vcf.gz.unmap daner_bip_pgc3_nm_noukbiobank_GRCh38.vcf ")
+
+
+os.system(f'''bcftools annotate --threads  10 \
+    -a /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/GCF_000001405_cleaed.40_Msplited.vcf.gz -c ID \
+    -o {path}/{filename[:-3]}_GRCh38_rsid156.vcf.gz -O z {path}/{filename[:-3]}_GRCh38.vcf.gz''')
+
+os.system(f'tabix -f -p vcf  {path}/{filename[:-3]}_GRCh38_rsid156.vcf.gz')
+
+os.system(f'zgrep -v "##" {path}/{filename[:-3]}_GRCh38_rsid156.vcf.gz > {path}/{filename[:-3]}_GRCh38_rsid156.tab')
+os.system(f'zgrep  "##" {path}/{filename[:-3]}_GRCh38_rsid156.vcf.gz > {path}/{filename[:-3]}_GRCh38_rsid156_header.txt')
+
+
+df=pd.read_csv(f"{path}/{filename[:-3]}_GRCh38_rsid156.tab",sep="\t")
+format_df=df["BIP_PGC3_noukb"].str.split(":",expand=True)
+df["ID"]=np.where(df["ID"].str.contains("rs"),df["ID"],df["#CHROM"].astype(str)+"_"+df["POS"].astype(str)+"_"+df["REF"]+"_"+df["ALT"])
+format_df[7]=df["ID"]
+format_df=format_df.astype("str")
+df['BIP_PGC3_noukb']=format_df[0]+":"+format_df[1]+":"+format_df[2]+":"+format_df[3]+":"+format_df[4]+":"+format_df[5]+":"+format_df[6]+":"+format_df[7]
+df.to_csv(f"{path}/{filename[:-3]}_GRCh38_rsid156.tab",sep="\t",index=None)
+
+os.system(f"cat {path}/{filename[:-3]}_GRCh38_rsid156_header.txt {path}/{filename[:-3]}_GRCh38_rsid156.tab | bgzip -c > {path}/{filename[:-3]}_GRCh38_rsid156.vcf.gz ")
+os.system(f'tabix -f -p vcf  {path}/{filename[:-3]}_GRCh38_rsid156.vcf.gz')
+
+
+df["ID"]=df["#CHROM"].astype(str)+"_"+df["POS"].astype(str)+"_"+df["REF"]+"_"+df["ALT"]
+format_df[7]=df["ID"]
+format_df=format_df.astype("str")
+df['BIP_PGC3_noukb']=format_df[0]+":"+format_df[1]+":"+format_df[2]+":"+format_df[3]+":"+format_df[4]+":"+format_df[5]+":"+format_df[6]+":"+format_df[7]
+df.to_csv(f"{path}/{filename[:-3]}_GRCh38_UniqID.tab",sep="\t",index=None)
+
+os.system(f"cat {path}/{filename[:-3]}_GRCh38_rsid156_header.txt {path}/{filename[:-3]}_GRCh38_UniqID.tab | bgzip -c > {path}/{filename[:-3]}_GRCh38_UniqID.vcf.gz ")
+os.system(f'tabix -f -p vcf  {path}/{filename[:-3]}_GRCh38_UniqID.vcf.gz')
+
+os.system(f" rm {path}/{filename[:-3]}_GRCh38_rsid156_header.txt {path}/{filename[:-3]}_GRCh38_UniqID.tab {path}/{filename[:-3]}_GRCh38_rsid156.tab  ")
+
