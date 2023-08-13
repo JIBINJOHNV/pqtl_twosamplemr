@@ -18,7 +18,17 @@ done
 plink --bfile ukb_imp_chr1_mac50_info07_b0_7_patched_bfiles --merge-list all_plinkfiles.txt --make-bed --out ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles
 
 
+for i in {1..22} X XY; do 
+
+rm ukb_imp_chr${i}_mac50_info07_b0_7_patched_bfiles.bim
+rm ukb_imp_chr${i}_mac50_info07_b0_7_patched_bfiles.bed
+rm ukb_imp_chr${i}_mac50_info07_b0_7_patched_bfiles.fam
+
+done 
+
+
+
 ####Few duplicate variants presents that needs to be removeed
-plink --bfile ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles --list-duplicate-vars
-plink --bfile ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles --exclude suppress-first plink.dupvar --out ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles_uniq
+#plink --bfile ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles --list-duplicate-vars
+#plink --bfile ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles --exclude suppress-first plink.dupvar --out ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles_uniq
 
