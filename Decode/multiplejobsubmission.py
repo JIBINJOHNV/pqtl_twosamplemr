@@ -145,5 +145,17 @@ for file in unique_files:
 
 
 
+os.system("mkdir -p Compiled_MR_Results/cis_exposure")
+os.system("mkdir -p Compiled_MR_Results/trans_exposure")
+os.system("mkdir -p Compiled_MR_Results/trans_exposure_noMHC")
+os.system("mkdir -p Compiled_MR_Results/trans_exposure_NoMHC_Unique")
+
+os.system("mv trans_exposure_NoMHC_Unique_* Compiled_MR_Results/trans_exposure_NoMHC_Unique")
+os.system("mv trans_exposure_noMHC_* Compiled_MR_Results/trans_exposure_noMHC")
+os.system("mv trans_exposure_* Compiled_MR_Results/trans_exposure")
+os.system("mv cis_exposure_* Compiled_MR_Results/cis_exposure")
+
+
+
 
 
