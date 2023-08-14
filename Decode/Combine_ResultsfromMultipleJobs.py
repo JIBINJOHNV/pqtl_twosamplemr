@@ -154,7 +154,7 @@ MR_All_df=pd.merge(MRAlltest_Result_df,MRIVWtest_df,on=["Outcome", "Exposure"],h
 MR_All_df_MRPRESSO_raw_df=pd.merge(MR_All_df,MRPRESSO_raw_df,on=['Exposure','Outcome'],how="outer")
 
 Final_mrResults=pd.merge(mr_pipeline_mrResults,MR_All_df_MRPRESSO_raw_df,on=["Outcome", "Exposure"],how="outer")
-Final_mrResults["Gene_Symbol"]=Final_mrResults["Exposure"].str.split(":",expand=True)[0]
+Final_mrResults["Gene_Symbol"]=Final_mrResults["Exposure"].str.split("_",expand=True)[0]
 Final_mrResults.to_csv(f"{Prefix}CompleteMR_AnalysisResults.csv",index=None)
 
 # List of strings to search for
