@@ -1,7 +1,7 @@
 import pandas as pd
 import os,glob
 
-Prefix="Decode_trans_exposure_NoMHC_Unique_" #"Decode_trans_exposure_" "Decode_cis_exposure_" "Decode_rans_exposure_noMHC_"  "Decode_trans_exposure_NoMHC_Unique_" 
+Prefix="Decode_trans_exposure_NoMHC_Unique_"   #"Decode_trans_exposure_NoMHC_Unique_" "Decode_trans_exposure_" "Decode_cis_exposure_" "Decode_rans_exposure_noMHC_"  
 
 cild=glob.glob("*TwoSampleMR_Analysis_Multiple_MR_Test.csv")
 MR_Analysis=pd.DataFrame()
@@ -160,7 +160,7 @@ Final_mrResults.to_csv(f"{Prefix}CompleteMR_AnalysisResults.csv",index=None)
 # List of strings to search for
 patterns_to_check = ["MRIVWtest_", "MR_Pipeline", "Hpleiotropy", "heterogeneity", "Direction"]
 Final_mrResults2=Final_mrResults[["Outcome","Exposure","Gene_Symbol"]+[ x for x in Final_mrResults.columns if [y for y in patterns_to_check if y in x ]  ]]
-Final_mrResults2.columns=["Outcome","Exposure","Gene_Symbol"]+[ x for x in Final_mrResults2.columns if  not [y for y in ["Outcome","Exposure","Gene_Symbol"] if y in x ]  ]
+Final_mrResults2.columns=["Outcome","Exposure","Gene_Symbol"]+[Prefix+x for x in Final_mrResults2.columns if  not [y for y in ["Outcome","Exposure","Gene_Symbol"] if y in x ]  ]
 Final_mrResults2.to_csv(f"{Prefix}CompleteMR_AnalysisResults_ForMtaP.csv",index=None)
 
 
@@ -214,7 +214,9 @@ mrpipelie2.columns=["exposure" ,"outcome"]+["MR_Pipeline_"+x for x in mrpipelie2
 meta_wald=pd.merge(meta,wald,on=['exposure', 'outcome', 'samplesize', 'SNP'])
 
 singlevariant_mr=pd.merge(meta_wald,mrpipelie2,left_on=['exposure','outcome','SNP'],right_on=["exposure","outcome","MR_Pipeline_snp"],how="outer")
-singlevariant_mr["Gene_Symbol"]=singlevariant_mr["exposure"].str.split(":",expand=True)[0]
+singlevariant_mr["Gene_Symbol"]=singlevariant_mr["exposure"].str.split("_",expand=True)[0]
 
 singlevariant_mr.to_csv(f"{Prefix}SingleVariant_CompleteMR_AnalysisResults.csv",index=None)
 
+print(singlevariant_mr)
+print(Final_mrResults2)
