@@ -1,7 +1,7 @@
 import pandas as pd
 import os,glob
 
-Prefix="Biogen_trans_exposure_noMHC_"  # "Biogen_CisExposure_" "Biogen_trans_exposure_NoMHC_Unique_" "Biogen_trans_exposure_"
+Prefix="Biogen_trans_exposure_NoMHC_Unique_"    # "Biogen_trans_exposure_noMHC_"  "Biogen_CisExposure_" "Biogen_trans_exposure_NoMHC_Unique_" "Biogen_trans_exposure_"
 
 cild=glob.glob("*TwoSampleMR_Analysis_Multiple_MR_Test.csv")
 MR_Analysis=pd.DataFrame()
@@ -160,7 +160,7 @@ MR_All_df=pd.merge(MRAlltest_Result_df,MRIVWtest_df,on=["Outcome", "Exposure"],h
 MR_All_df_MRPRESSO_raw_df=pd.merge(MR_All_df,MRPRESSO_raw_df,on=['Exposure','Outcome'],how="outer")
 
 Final_mrResults=pd.merge(mr_pipeline_mrResults,MR_All_df_MRPRESSO_raw_df,on=["Outcome", "Exposure"],how="outer")
-Final_mrResults["Gene_Symbol"]=Final_mrResults["Exposure"].str.split("_",expand=True)[0]
+Final_mrResults["Gene_Symbol"]=Final_mrResults["Exposure"].str.split(":",expand=True)[0]
 Final_mrResults.to_csv(f"{Prefix}CompleteMR_AnalysisResults.csv",index=None)
 
 
@@ -168,7 +168,7 @@ Final_mrResults.to_csv(f"{Prefix}CompleteMR_AnalysisResults.csv",index=None)
 # List of strings to search for
 patterns_to_check = ["MRIVWtest_", "MR_Pipeline", "Hpleiotropy", "heterogeneity", "Direction"]
 Final_mrResults2=Final_mrResults[["Outcome","Exposure","Gene_Symbol"]+[ x for x in Final_mrResults.columns if [y for y in patterns_to_check if y in x ]  ]]
-Final_mrResults2.columns=["Outcome","Exposure","Gene_Symbol"]+[ x for x in Final_mrResults2.columns if  not [y for y in ["Outcome","Exposure","Gene_Symbol"] if y in x ]  ]
+Final_mrResults2.columns=["Outcome","Exposure","Gene_Symbol"]+[ Prefix+x for x in Final_mrResults2.columns if  not [y for y in ["Outcome","Exposure","Gene_Symbol"] if y in x ]  ]
 Final_mrResults2.to_csv(f"{Prefix}CompleteMR_AnalysisResults_ForMtaP.csv",index=None)
 
 
@@ -226,3 +226,7 @@ singlevariant_mr=pd.merge(meta_wald,mrpipelie2,left_on=['exposure','outcome','SN
 singlevariant_mr["Gene_Symbol"]=singlevariant_mr["exposure"].str.split(":",expand=True)[0]
 
 singlevariant_mr.to_csv(f"{Prefix}SingleVariant_CompleteMR_AnalysisResults.csv",index=None)
+
+
+print(singlevariant_mr)
+print(Final_mrResults2)
