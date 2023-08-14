@@ -228,3 +228,5 @@ singlevariant_mr=pd.merge(meta_wald,mrpipelie2,left_on=['exposure','outcome','SN
 singlevariant_mr=singlevariant_mr.drop_duplicates()
 
 singlevariant_mr.to_csv("Cis_exposure_SingleVariant_CompleteMR_AnalysisResults.csv",index=None)
+
+
