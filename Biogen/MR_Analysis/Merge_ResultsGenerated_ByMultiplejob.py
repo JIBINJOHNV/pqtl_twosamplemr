@@ -5,6 +5,10 @@ import pandas as pd
 unique_files=glob.glob("Part0/cis_exposure_*")
 unique_files=[x.split("/")[1] for x in unique_files ]
 
+print("\n\n",len(unique_files))
+for i in unique_files:
+    print(i)
+
 for file in unique_files:
     Files=glob.glob(f"Part*/{file}")
     master_df=pd.DataFrame()
@@ -12,12 +16,20 @@ for file in unique_files:
         part_file_df=pd.read_csv(part_file)
         master_df=pd.concat([master_df,part_file_df])
     master_df.to_csv(f"{file}",index=None)
+
+
+
+
 
 ## trans_exposure_TwoSampleMR_
 unique_files=glob.glob("Part0/trans_exposure_*")
 unique_files=[x.split("/")[1] for x in unique_files ]
 unique_files=[x for x in unique_files if "MHC" not in x]
 
+print("\n\n",len(unique_files))
+for i in unique_files:
+    print(i)
+    
 for file in unique_files:
     Files=glob.glob(f"Part*/{file}")
     master_df=pd.DataFrame()
@@ -26,10 +38,16 @@ for file in unique_files:
         master_df=pd.concat([master_df,part_file_df])
     master_df.to_csv(f"{file}",index=None)
 
+
+
 ##trans_exposure_noMHC_
 unique_files=glob.glob("Part0/trans_exposure_noMHC_*")
 unique_files=[x.split("/")[1] for x in unique_files ]
 
+print("\n\n",len(unique_files))
+for i in unique_files:
+    print(i)
+    
 for file in unique_files:
     Files=glob.glob(f"Part*/{file}")
     master_df=pd.DataFrame()
@@ -39,9 +57,16 @@ for file in unique_files:
     master_df.to_csv(f"{file}",index=None)
     
 
+
+
+
 ##trans_exposure_NoMHC_Unique_
 unique_files=glob.glob("Part0/trans_exposure_NoMHC_Unique_*")
 unique_files=[x.split("/")[1] for x in unique_files ]
+
+print("\n\n",len(unique_files))
+for i in unique_files:
+    print(i)
 
 for file in unique_files:
     Files=glob.glob(f"Part*/{file}")
