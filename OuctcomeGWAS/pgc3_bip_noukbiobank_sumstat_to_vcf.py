@@ -23,7 +23,7 @@ print(tempfile.gettempdir())
 #args=parser.parse_args()
 #filename=args.filename
 
-##File location /edgehpc/dept/human_genetics/users/jjohn1/Outcome_GWAS/PGC3_SCZ/UniqID
+##File location /edgehpc/dept/human_genetics/users/jjohn1/Outcome_GWAS/bip_pgc3
 os.system("wget https://figshare.com/ndownloader/files/40036705")
 os.system("mv 40036705 daner_bip_pgc3_nm_noukbiobank.gz")
 os.system('wget https://figshare.com/ndownloader/files/40036729')
@@ -41,7 +41,6 @@ fdf3["Beta"]=np.log(fdf3["OR"])
 fdf3.drop("OR",axis=1,inplace=True)
 fdf3=fdf3[['CHR','BP','SNP','A1','A2',"Beta",'SE','Nco','Nca','P','FRQ_U_313436','INFO' ]]
 fdf3.to_csv(f'{filename[:-3]}.tsv',sep="\t",index=None)
-
 
 paramsdict={"chr_col": 0,
     "pos_col": 1,
@@ -83,7 +82,7 @@ os.system(f'''CrossMap.py vcf /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf
 
 os.system(f"bcftools sort {path}/{filename[:-3]}_GRCh38.vcf | bgzip -c > {path}/{filename[:-3]}_GRCh38.vcf.gz")
 os.system(f'tabix -f -p vcf  {path}/{filename[:-3]}_GRCh38.vcf.gz')
-os.system("rm daner_bip_pgc3_nm_noukbiobank_GRCh38.vcf.gz.unmap daner_bip_pgc3_nm_noukbiobank_GRCh38.vcf ")
+os.system("rm daner_bip_pgc3_nm_noukbiobank_GRCh38.vcf ")
 
 
 os.system(f'''bcftools annotate --threads  10 \
@@ -102,20 +101,33 @@ df["ID"]=np.where(df["ID"].str.contains("rs"),df["ID"],df["#CHROM"].astype(str)+
 format_df[7]=df["ID"]
 format_df=format_df.astype("str")
 df['BIP_PGC3_noukb']=format_df[0]+":"+format_df[1]+":"+format_df[2]+":"+format_df[3]+":"+format_df[4]+":"+format_df[5]+":"+format_df[6]+":"+format_df[7]
-df.to_csv(f"{path}/{filename[:-3]}_GRCh38_rsid156.tab",sep="\t",index=None)
 
+format_df2=df["FORMAT"].str.split(":",expand=True)
+format_df2[7]="ID"
+df['FORMAT']=format_df2[0]+":"+format_df2[1]+":"+format_df2[2]+":"+format_df2[3]+":"+format_df2[4]+":"+format_df2[5]+":"+format_df2[6]+":"+format_df2[7]
+
+df['FORMAT'].str.split(":",expand=True).isna().sum()
+df['BIP_PGC3_noukb'].str.split(":",expand=True).isna().sum()
+print(df)
+
+df.to_csv(f"{path}/{filename[:-3]}_GRCh38_rsid156.tab",sep="\t",index=None)
 os.system(f"cat {path}/{filename[:-3]}_GRCh38_rsid156_header.txt {path}/{filename[:-3]}_GRCh38_rsid156.tab | bgzip -c > {path}/{filename[:-3]}_GRCh38_rsid156.vcf.gz ")
 os.system(f'tabix -f -p vcf  {path}/{filename[:-3]}_GRCh38_rsid156.vcf.gz')
 
 
+##Replace rsid with Uniqid
 df["ID"]=df["#CHROM"].astype(str)+"_"+df["POS"].astype(str)+"_"+df["REF"]+"_"+df["ALT"]
 format_df[7]=df["ID"]
 format_df=format_df.astype("str")
 df['BIP_PGC3_noukb']=format_df[0]+":"+format_df[1]+":"+format_df[2]+":"+format_df[3]+":"+format_df[4]+":"+format_df[5]+":"+format_df[6]+":"+format_df[7]
-df.to_csv(f"{path}/{filename[:-3]}_GRCh38_UniqID.tab",sep="\t",index=None)
 
+df['FORMAT'].str.split(":",expand=True).isna().sum()
+df['BIP_PGC3_noukb'].str.split(":",expand=True).isna().sum()
+print(df)
+
+df.to_csv(f"{path}/{filename[:-3]}_GRCh38_UniqID.tab",sep="\t",index=None)
 os.system(f"cat {path}/{filename[:-3]}_GRCh38_rsid156_header.txt {path}/{filename[:-3]}_GRCh38_UniqID.tab | bgzip -c > {path}/{filename[:-3]}_GRCh38_UniqID.vcf.gz ")
 os.system(f'tabix -f -p vcf  {path}/{filename[:-3]}_GRCh38_UniqID.vcf.gz')
-
 os.system(f" rm {path}/{filename[:-3]}_GRCh38_rsid156_header.txt {path}/{filename[:-3]}_GRCh38_UniqID.tab {path}/{filename[:-3]}_GRCh38_rsid156.tab  ")
+os.system(f"rm {path}/{filename[:-3]}.vcf.gz* {path}/{filename[:-3]}_GRCh38.vcf.gz*")
 
