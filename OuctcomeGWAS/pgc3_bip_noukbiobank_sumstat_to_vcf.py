@@ -18,13 +18,17 @@ import argparse
 pd.set_option('display.float_format', '{:.2E}'.format)
 print(tempfile.gettempdir())
 
+#parser=argparse.ArgumentParser(description="It is for Incorporating additional information and Initial filtering of Annovar out put file")
+#parser.add_argument('-filename','--filename', help="file name ", required=True)
+#args=parser.parse_args()
+#filename=args.filename
 
-parser=argparse.ArgumentParser(description="It is for Incorporating additional information and Initial filtering of Annovar out put file")
-parser.add_argument('-filename','--filename', help="file name ", required=True)
+##File location /edgehpc/dept/human_genetics/users/jjohn1/Outcome_GWAS/PGC3_SCZ/UniqID
+os.system("wget https://figshare.com/ndownloader/files/40036705")
+os.system("mv 40036705 daner_bip_pgc3_nm_noukbiobank.gz")
+os.system('wget https://figshare.com/ndownloader/files/40036729')
+os.system("mv 40036729 readme.txt")
 
-
-args=parser.parse_args()
-filename=args.filename
 
 filename="daner_bip_pgc3_nm_noukbiobank.gz" #location /edgehpc/dept/human_genetics/users/jjohn1/Outcome_GWAS/bip_pgc3
 
