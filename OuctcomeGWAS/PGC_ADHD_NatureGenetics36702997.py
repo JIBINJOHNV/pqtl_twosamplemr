@@ -23,13 +23,11 @@ print(tempfile.gettempdir())
 ##File location /edgehpc/dept/human_genetics/users/jjohn1/Outcome_GWAS/PGC_ADHD
 os.system("wget https://figshare.com/ndownloader/files/40036684")
 os.system("mv 40036684 ADHD2022_iPSYCH_deCODE_PGC.meta.gz")
-os.system('zgrep -v "##" ADHD2022_iPSYCH_deCODE_PGC.meta.gz  > ADHD2022_iPSYCH_deCODE_PGC.meta.tsv')
-
 os.system("wget https://figshare.com/ndownloader/files/40036699")
 os.system("mv 40036699 ADHD2022_README.pdf")
 
 
-
+os.system('zgrep -v "##" ADHD2022_iPSYCH_deCODE_PGC.meta.gz  > ADHD2022_iPSYCH_deCODE_PGC.meta.tsv')
 filename="ADHD2022_iPSYCH_deCODE_PGC.meta.tsv" #location /edgehpc/dept/human_genetics/users/jjohn1/Outcome_GWAS/PGC3_SCZ/UniqID
 fdf=pd.read_csv(filename,sep=" ")
 
@@ -37,6 +35,9 @@ fdf3=fdf[['CHR', 'SNP', 'BP', 'A1', 'A2','FRQ_U_186843', 'INFO', 'OR', 'SE', 'P'
 fdf3[['BP','Nca', 'Nco']]=fdf3[['BP','Nca', 'Nco']].astype("int")
 fdf3[['FRQ_U_186843', 'INFO', 'OR', 'SE', 'P']]=fdf3[['FRQ_U_186843', 'INFO', 'OR', 'SE', 'P']].astype("float")
 fdf3=fdf3[['CHR','BP','SNP','A1','A2',"OR",'SE','Nco','Nca','P','FRQ_U_186843','INFO' ]]
+fdf3[fdf3["OR"]<0]
+
+fdf3["OR"]=np.log(fdf3["OR"])
 fdf3.to_csv(f'{filename[:-4]}.tsv',sep="\t",index=None)
 
 
