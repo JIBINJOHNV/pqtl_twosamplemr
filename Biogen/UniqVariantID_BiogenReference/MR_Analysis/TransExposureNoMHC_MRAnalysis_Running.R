@@ -245,20 +245,34 @@ for ( Exposure in sort(unique(exposure_df$exposure))  ) {
 
         #MendelianRandomization  https://github.com/cran/MendelianRandomization Version 0.8
         if (nrow(dat) > 0) {
+            M_Randomization_df<-data.frame()
             dat2 <- dat_to_MRInput(dat)
             tryCatch({
             MRAllObject_all <- MendelianRandomization::mr_allmethods(dat2[[1]], method = "all")
             }, error = function(e) {})
 
             tryCatch({
-            df2 <- as.data.frame(MRAllObject_all@Values)
+            M_Randomization_df <- as.data.frame(MRAllObject_all@Values)
             }, error = function(e) {})
 
-            if (nrow(df2) > 0) {
-            df2$outcome <- dat$outcome[1]
-            df2$exposure <- dat$exposure[1]
-            df2$SNPs <- paste(unique(dat$SNP), collapse = ",")
-            MendelianRandomization_df <<- rbind.fill(MendelianRandomization_df, df2)
+
+            #Some situation all meethods not work , however ivw will work
+            if (nrow(M_Randomization_df) == 0) {
+            tryCatch({
+            MRAllObject_all <- MendelianRandomization::mr_allmethods(dat2[[1]], method = "ivw")
+            }, error = function(e) {})
+
+            tryCatch({
+            M_Randomization_df <- as.data.frame(MRAllObject_all@Values)
+            }, error = function(e) {})
+
+            }
+
+            if (nrow(M_Randomization_df) > 0) {
+            M_Randomization_df$outcome <- dat$outcome[1]
+            M_Randomization_df$exposure <- dat$exposure[1]
+            M_Randomization_df$SNPs <- paste(unique(dat$SNP), collapse = ",")
+            MendelianRandomization_df <<- rbind.fill(MendelianRandomization_df, M_Randomization_df)
             }
         }
 
