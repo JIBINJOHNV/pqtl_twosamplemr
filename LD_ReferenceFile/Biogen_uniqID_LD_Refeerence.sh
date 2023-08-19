@@ -32,3 +32,49 @@ done
 #plink --bfile ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles --list-duplicate-vars
 #plink --bfile ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles --exclude suppress-first plink.dupvar --out ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles_uniq
 
+
+
+
+
+
+
+
+
+
+
+##########Not completed
+
+for chr in {1..22} X XY; do 
+
+plink --bfile /edgehpc/dept/human_genetics/users/jjohn1/Referencefile_h19/ukb_imp_chr1_22_mac50_info07_b0_7_patched_bfiles_Hg38/ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles \
+    --make-bed  --snps-only --chr ${chr} --out ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles_SNP_Only_Chr${chr} 
+
+done 
+
+
+
+for chr in {1..22} X XY; do 
+
+/edgehpc/dept/human_genetics/users/jjohn1/Software/gotcloud/bin/vcfCooker \
+    --write-vcf --bgzf \
+    --ref /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
+    --in-bfile ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles_SNP_Only_Chr${chr} \
+    --out ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles_SNP_Only_Chr${chr}_vcfCooker
+
+done
+
+
+for chr in {1..22} X XY; do 
+
+plink  --vcf ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles_SNP_Only_Chr${chr}_vcfCooker.vcf.gz --keep-allele-order \
+    --make-bed --out ukb_imp_chr1_22XXY_mac50_info07_b0_7_patched_bfiles_SNP_Only_Chr${chr}_vcfCooker 
+
+done 
+
+
+source /home/jjohn1/modulefiles/anaconda3/bin/activate
+module load SAMtools/1.15-GCC-11.2.0
+module load PLINK/1.9b_6.21-x86_64
+module load R/4.1.3-foss-2021b
+
+
