@@ -28,7 +28,7 @@ library(MendelianRandomization, lib.loc = '/home/jjohn1/modulefiles/mrpipeline')
 #load("/home/jjohn1/modulefiles/R4.1_modules/rf.rdata")
 
 
-exposure_file<-"All_significannt_trans_exposure_AfterQC_LDclumping_MHCRemoval.csv"
+exposure_file<-"All_significannt_trans_exposure_AfterQC_LDclumping_NoMHC_Unique.csv"
 prefix="cis_exposure"
 
 
