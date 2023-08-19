@@ -1,4 +1,0 @@
-Filename,SomaScan_Symbol,SomaScan_Sequence_ID,Gene name,Biomart_Chromosome,Biomart_TranscriptStart,Biomart_TranscriptEnd
-10000_28_CRYBB2_CRBB2.txt.gz,CRYBB2,10000_28,CRYBB2,22,25212564,25231870
-10001_7_RAF1_c_Raf.txt.gz,RAF1,10001_7,RAF1,3,12582101,12664201
-10003_15_ZNF41_ZNF41.txt.gz,ZNF41,10003_15,ZNF41,X,47445178,47483222
