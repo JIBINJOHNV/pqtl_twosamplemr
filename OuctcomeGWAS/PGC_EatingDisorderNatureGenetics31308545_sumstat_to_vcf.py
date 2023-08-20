@@ -93,17 +93,6 @@ os.system(f'''bcftools annotate --threads  10 \
 os.system(f'tabix -f -p vcf {path}/{filename[:-4]}_GRCh38_rsid156.vcf.gz')
 
 
-os.system(f'''bcftools annotate --threads  10 \
-    -a /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/GCF_000001405_cleaed.40_Msplited.vcf.gz -c ID \
-    -o {path}/{filename[:-4]}_GRCh38_rsid156.vcf.gz -O z {path}/{filename[:-4]}_GRCh38.vcf.gz''')
-
-
-os.system(f'''bcftools annotate --threads  10 --collapse none \
-              -a /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/1000GENOMES-phase_3_GRCh38_Msplited.vcf.gz -c 'INFO/EUR:=ID' \
-              {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF.vcf.gz  -O z {path}/{filename[:-4]}_GRCh38_rsid156.vcf.gz''')
-
-
-
 ##Since allele frequency not present we useed 1000 gENOME EUR Freq ; location /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/
 os.system("wget https://ftp.ensembl.org/pub/current_variation/vcf/homo_sapiens/1000GENOMES-phase_3.vcf.gz")
 os.system("""bcftools norm -m-any --check-ref -w \
@@ -112,6 +101,44 @@ os.system("""bcftools norm -m-any --check-ref -w \
               /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/1000GENOMES-phase_3_GRCh38_Msplited.vcf.gz""")
 
 os.system("tabix -p vcf 1000GENOMES-phase_3_GRCh38_Msplited.vcf.gz")
+
+
+##Adding Europe 1kg allele frequency
+os.system(f'''bcftools annotate --threads  10 --collapse none \
+              -a /edgehpc/dept/human_genetics/users/jjohn1/gwas_vcf_reffiles/1000GENOMES-phase_3_GRCh38_Msplited.vcf.gz -c 'INFO/EUR' \
+              -o {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF.vcf.gz  -O z {path}/{filename[:-4]}_GRCh38_rsid156.vcf.gz''')
+
+os.system(f"rm  {path}/{filename[:-4]}_GRCh38_rsid156.vcf.gz*  {path}/{filename[:-4]}_GRCh38.vcf.gz* {path}/{filename[:-4]}.vcf*")
+
+
+
+##Ading dbsnp 156 to the format section
+os.system(f'zgrep -v "##" {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF.vcf.gz > {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF.tab')
+os.system(f'zgrep  "##" {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF.vcf.gz > {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF_header.txt')
+
+
+df=pd.read_csv(f"{path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF.tab",sep="\t")
+format_df2=df["FORMAT"].str.split(":",expand=True)
+
+
+
+format_df2[7]="ID"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
