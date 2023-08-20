@@ -222,5 +222,3 @@ for gwasname in gwasnames:
             britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.to_excel(writer, sheet_name='Complete_MR_Results')
             singlevariant_mr.to_excel(writer, sheet_name='Singlevariant')
 
-
-
