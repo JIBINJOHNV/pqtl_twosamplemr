@@ -212,7 +212,8 @@ for gwasname in gwasnames:
         singlevariant_mr=pd.merge(TwoSampleMR_meta_wald,biogen,on=['exposure','outcome','SNP'],how="outer")
         singlevariant_mr.drop("samplesize",axis=1,inplace=True)
         singlevariant_mr["Gene_Symbol"]=singlevariant_mr["exposure"].str.split(":",expand=True)[0]
-        singlevariant_mr.columns=["Gene_Symbol"]+list(singlevariant_mr.iloc[:,:-1].columns)
+        singlevariant_mr_columns=['Gene_Symbol','exposure', 'outcome', 'SNP', 'TwosampleMR-wald_b', 'TwosampleMR-wald_se', 'TwosampleMR-wald_p', 'TwosampleMR-metafixed_b', 'TwosampleMR-metafixed_se', 'TwosampleMR-metafixed_p', 'Biogen_method', 'Biogen_nsnp', 'Biogen_b', 'Biogen_se', 'Biogen_pval', 'Biogen_lo_ci', 'Biogen_up_ci', 'Biogen_or', 'Biogen_or_lci95', 'Biogen_or_uci95', 'Biogen_egger_intercept', 'Biogen_se.egger', 'Biogen_pval.egger', 'Biogen_snp_r2.exposure', 'Biogen_snp_r2.outcome', 'Biogen_correct_causal_direction', 'Biogen_steiger_pval', 'Biogen_steigerflag']
+        singlevariant_mr.columns=singlevariant_mr_columns
         singlevariant_mr.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_SingleVariant_CompleteMR_AnalysisResults.csv",index=None)
         Formeta.columns=['Gene_Symbol', 'exposure', 'outcome']+[pqtltype+"-Pqtl_"+x for x in Formeta.columns if x not in ['Gene_Symbol', 'exposure', 'outcome'] ]
         
