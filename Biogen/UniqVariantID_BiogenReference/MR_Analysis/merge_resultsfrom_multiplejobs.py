@@ -5,7 +5,7 @@ import os,glob
 
 basedir=os.getcwd()+"/"
 pqtltype="Biogen"
-gwasnames=['PGC_ADHD2022_iPSYCH_deCODE', 'BIP_PGC3_noukb', 'ASD_PGC', 'PGC3_SCZ', 'PGC_MDD_Depression']
+gwasnames=['Depression_iPSYCH_2023','BIP_PGC3_noukb']
 cis_trans=['TransExposureNoMHC', 'TransExposure', 'CisExposure', 'TransExposureNoMHCUnique']
 
 os.system("mkdir CombinedResultsfromAllBatches")
@@ -32,16 +32,7 @@ for gwasname in gwasnames:
 
                
 
-
-import pandas as pd
-import os,glob
-
-
-basedir=os.getcwd()+"/"
-pqtltype="Biogen"
-gwasnames=['BIP_PGC3_noukb']
-cis_trans=['TransExposureNoMHC', 'TransExposure', 'CisExposure', 'TransExposureNoMHCUnique']
-
+META_PCOLUMNS=['Gene_Symbol','exposure','outcome','BritishMR-IVWDelta_Pvalue','Biogen_pval','Biogen_snp','Biogen_nsnp','Biogen_method','BritishMR-IVWDelta_SNPs','BritishMR-IVWDelta_Heter.Stat', 'TwoSampleMR_Hpleiotropy_pval', 'TwoSampleMR_heterogeneity_Q_pval_Ivw', 'TwoSampleMR_heterogeneity_Q_pval_Ivw(Fixedeffects)', 'TwoSampleMR_heterogeneity_Q_pval_Ivw(M-Randomeffects)', 'TwoSampleMR_heterogeneity_Q_pval_Ivwradial', 'TwoSampleMR_heterogeneity_Q_pval_Maximumlikelihood', 'TwoSampleMR_heterogeneity_Q_pval_Mregger', 'TwoSampleMR_heterogeneity_Q_pval_Mregger(Bootstrap)', 'TwoSampleMR_heterogeneity_Q_pval_Penalisedweightedmedian', 'TwoSampleMR_heterogeneity_Q_pval_Signconcordancetest', 'TwoSampleMR_heterogeneity_Q_pval_Simplemedian', 'TwoSampleMR_heterogeneity_Q_pval_Simplemode', 'TwoSampleMR_heterogeneity_Q_pval_Simplemode(Nome)', 'TwoSampleMR_heterogeneity_Q_pval_Unweightedregression', 'TwoSampleMR_heterogeneity_Q_pval_Waldratio', 'TwoSampleMR_heterogeneity_Q_pval_Weightedmedian', 'TwoSampleMR_heterogeneity_Q_pval_Weightedmode', 'TwoSampleMR_heterogeneity_Q_pval_Weightedmode(Nome)', 'TwoSampleMR_Direction_correct_causal_direction']
 
 for gwasname in gwasnames:
     for cistran in cis_trans:
@@ -126,7 +117,7 @@ for gwasname in gwasnames:
         mr_pipeline_result=pd.concat([wald,inv]).drop_duplicates()
         mr_pipeline_result.drop("type",axis=1,inplace=True)
         mr_pipeline_result.columns=["exposure" ,"outcome"]+["Biogen_"+x for x in mr_pipeline_result.columns if x not in ["outcome" ,"exposure"]]
-        mr_pipeline_result_pvaluiecolumns=mr_pipeline_result[['exposure', 'outcome','Biogen_method', 'Biogen_nsnp','Biogen_pval']]
+        mr_pipeline_result_pvaluiecolumns=mr_pipeline_result[['exposure', 'outcome','Biogen_method', 'Biogen_nsnp','Biogen_pval','Biogen_snp']]
         
         ################################-------------------------- Mendelian randomisation all test
         MRAlltest_files=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*MendelianRandomization_AllTest.csv")[0]
@@ -164,7 +155,7 @@ for gwasname in gwasnames:
         colorder=list(britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.columns)
         britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO["Gene_Symbol"]=britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO["exposure"].str.split("_",expand=True)[0]
         britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO=britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO[['Gene_Symbol']+colorder]
-        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.to_csv(f"{file_prefix}_CompleteMR_AnalysisResults.csv",index=None)
+        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults.csv",index=None)
         
         ##Merge only selected important columns
         mr_pleiohet_pvaluiecolumns=pd.merge(pleio_pvaluiecolumns,het_2_pvaluiecolumns,on=['outcome', 'exposure'],how="outer")
@@ -180,6 +171,62 @@ for gwasname in gwasnames:
         allmr_pvalues_dirhetpleio=pd.merge(allmr_pvalues,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="outer")
         allmr_pvalues_dirhetpleio.columns=[ x.replace("TwoSampleMR_TwoSampleMR_","TwoSampleMR_") for x in allmr_pvalues_dirhetpleio.columns ]
         colorder=list(allmr_pvalues_dirhetpleio.columns)
-        allmr_pvalues_dirhetpleio["Gene_Symbol"]=allmr_pvalues_dirhetpleio["exposure"].str.split("_",expand=True)[0]
+        allmr_pvalues_dirhetpleio["Gene_Symbol"]=allmr_pvalues_dirhetpleio["exposure"].str.split(":",expand=True)[0]
         allmr_pvalues_dirhetpleio=allmr_pvalues_dirhetpleio[['Gene_Symbol']+colorder]
-        allmr_pvalues_dirhetpleio.to_csv(f"{file_prefix}_CompleteMR_AnalysisResults_WithselectedColumns.csv",index=None)
+        allmr_pvalues_dirhetpleio.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults_WithselectedColumns.csv",index=None)
+        Formeta=allmr_pvalues_dirhetpleio[META_PCOLUMNS]
+        Formeta.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
+        
+        ################----------------------------------------Single variant---------------------------------------------------
+        ##Metafixed
+        TwoSampleMR_metafixed_file=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*TwoSampleMR_Analysis_SingleVariantMetafixed_Test.csv")[0]
+        meta=pd.read_csv(TwoSampleMR_metafixed_file)
+        meta=meta[meta["SNP"].str.contains("_")]
+        meta=meta.drop(["id.exposure", "id.outcome"],axis=1)
+        meta=meta.drop_duplicates()
+        meta=meta.sort_values(["outcome", "exposure","SNP","p"])
+        meta = meta.drop_duplicates(subset=["outcome", "exposure","SNP"],keep='first')
+        TwoSampleMR_metafixed_df=meta.rename(columns={"b":"TwosampleMR-metafixed_b","se":"TwosampleMR-metafixed_se","p":"TwosampleMR-metafixed_p"})
+        
+        ##Wald test
+        TwoSampleMR_wald_file=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*TwoSampleMR_Analysis_SingleVariantWald_Test.csv")[0]
+        wald=pd.read_csv(TwoSampleMR_wald_file)
+        wald=wald[wald["SNP"].str.contains("_")]
+        wald=wald.drop(["id.exposure", "id.outcome"],axis=1)
+        wald=wald.drop_duplicates()
+        wald=wald.sort_values(["outcome", "exposure","SNP","p"])
+        wald = wald.drop_duplicates(subset=["outcome", "exposure","SNP"],keep='first')
+        TwoSampleMR_wald_df=wald.rename(columns={"b":"TwosampleMR-wald_b","se":"TwosampleMR-wald_se","p":"TwosampleMR-wald_p"})
+        
+        ##Mr pipeline
+        mr_file=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*MendelianPipelineTest.csv")[0]
+        mrpipelie=pd.read_csv(mr_file)
+        mrpipelie=mrpipelie[~mrpipelie['exposure'].isna()]
+        mrpipelie=mrpipelie.drop(["id.exposure", "id.outcome"],axis=1)
+        biogen=mrpipelie[mrpipelie["method"]=="Wald ratio"]
+        biogen=biogen.rename(columns={"snp":"SNP"})
+        biogen=biogen[['exposure', 'outcome','SNP','method', 'nsnp','b', 'se', 'pval','lo_ci', 'up_ci', 'or', 'or_lci95', 'or_uci95', 'egger_intercept','se.egger', 'pval.egger', 'snp_r2.exposure', 'snp_r2.outcome','correct_causal_direction', 'steiger_pval', 'steigerflag']]
+        biogen.columns=['exposure', 'outcome','SNP']+[ "Biogen_"+x for x in biogen.columns if x not in ['exposure', 'outcome','SNP']]
+        
+        TwoSampleMR_meta_wald=pd.merge(TwoSampleMR_wald_df,TwoSampleMR_metafixed_df,on=['exposure', 'outcome', 'samplesize', 'SNP'],how="outer")
+        singlevariant_mr=pd.merge(TwoSampleMR_meta_wald,biogen,on=['exposure','outcome','SNP'],how="outer")
+        singlevariant_mr.drop("samplesize",axis=1,inplace=True)
+        singlevariant_mr["Gene_Symbol"]=singlevariant_mr["exposure"].str.split(":",expand=True)[0]
+        singlevariant_mr.columns=["Gene_Symbol"]+list(singlevariant_mr.iloc[:,:-1].columns)
+        singlevariant_mr.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_SingleVariant_CompleteMR_AnalysisResults.csv",index=None)
+        Formeta.columns=['Gene_Symbol', 'exposure', 'outcome']+[pqtltype+"-Pqtl_"+x for x in Formeta.columns if x not in ['Gene_Symbol', 'exposure', 'outcome'] ]
+        
+        Formeta=Formeta.fillna("NA")
+        allmr_pvalues_dirhetpleio=allmr_pvalues_dirhetpleio.fillna("NA")
+        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO=britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.fillna("NA")
+        singlevariant_mr=singlevariant_mr.fillna("NA")
+        
+        with pd.ExcelWriter(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults.xlsx", engine='xlsxwriter') as writer:
+            Formeta.to_excel(writer, sheet_name='biogen_british')
+            allmr_pvalues_dirhetpleio.to_excel(writer, sheet_name='All_MR_Pvalues')
+            britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.to_excel(writer, sheet_name='Complete_MR_Results')
+            singlevariant_mr.to_excel(writer, sheet_name='Singlevariant')
+
+
+
+
