@@ -216,9 +216,13 @@ for gwasname in gwasnames:
         singlevariant_mr.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_SingleVariant_CompleteMR_AnalysisResults.csv",index=None)
         Formeta.columns=['Gene_Symbol', 'exposure', 'outcome']+[pqtltype+"_"+x for x in Formeta.columns if x not in ['Gene_Symbol', 'exposure', 'outcome'] ]
         
+        Formeta=Formeta.fillna("NA")
+        allmr_pvalues_dirhetpleio=allmr_pvalues_dirhetpleio.fillna("NA")
+        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO=britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.fillna("NA")
+        singlevariant_mr=singlevariant_mr.fillna("NA")
+        
         with pd.ExcelWriter(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults.xlsx", engine='xlsxwriter') as writer:
-            allmr_pvalues_dirhetpleio[META_PCOLUMNS].to_excel(writer, sheet_name='biogen_british')
+            Formeta.to_excel(writer, sheet_name='biogen_british')
             allmr_pvalues_dirhetpleio.to_excel(writer, sheet_name='All_MR_Pvalues')
             britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.to_excel(writer, sheet_name='Complete_MR_Results')
             singlevariant_mr.to_excel(writer, sheet_name='Singlevariant')
-
