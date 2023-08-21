@@ -162,7 +162,7 @@ for gwasname in gwasnames:
         britishall_biogen_britishivwdelta=pd.merge(MRAlltest_Result_df,biogen_british_ivwdelta,on=["outcome", "exposure"],how="outer")
         britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO=pd.merge(twosamplemr_MRPRESSO,britishall_biogen_britishivwdelta,on=["outcome", "exposure"],how="outer")
         colorder=list(britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.columns)
-        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO["Gene_Symbol"]=britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO["exposure"].str.split(":",expand=True)[0]
+        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO["Gene_Symbol"]=britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO["exposure"].str.split("_",expand=True)[0]
         britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO=britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO[['Gene_Symbol']+colorder]
         britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.to_csv(f"{file_prefix}_CompleteMR_AnalysisResults.csv",index=None)
         
@@ -180,6 +180,6 @@ for gwasname in gwasnames:
         allmr_pvalues_dirhetpleio=pd.merge(allmr_pvalues,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="outer")
         allmr_pvalues_dirhetpleio.columns=[ x.replace("TwoSampleMR_TwoSampleMR_","TwoSampleMR_") for x in allmr_pvalues_dirhetpleio.columns ]
         colorder=list(allmr_pvalues_dirhetpleio.columns)
-        allmr_pvalues_dirhetpleio["Gene_Symbol"]=allmr_pvalues_dirhetpleio["exposure"].str.split(":",expand=True)[0]
+        allmr_pvalues_dirhetpleio["Gene_Symbol"]=allmr_pvalues_dirhetpleio["exposure"].str.split("_",expand=True)[0]
         allmr_pvalues_dirhetpleio=allmr_pvalues_dirhetpleio[['Gene_Symbol']+colorder]
         allmr_pvalues_dirhetpleio.to_csv(f"{file_prefix}_CompleteMR_AnalysisResults_WithselectedColumns.csv",index=None)
