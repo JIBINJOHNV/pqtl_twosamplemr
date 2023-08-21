@@ -214,7 +214,7 @@ for gwasname in gwasnames:
         singlevariant_mr["Gene_Symbol"]=singlevariant_mr["exposure"].str.split("_",expand=True)[0]
         singlevariant_mr.columns=["Gene_Symbol"]+list(singlevariant_mr.iloc[:,:-1].columns)
         singlevariant_mr.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_SingleVariant_CompleteMR_AnalysisResults.csv",index=None)
-        Formeta.columns=['Gene_Symbol', 'exposure', 'outcome']+[pqtltype+"_"+x for x in Formeta.columns if x not in ['Gene_Symbol', 'exposure', 'outcome'] ]
+        Formeta.columns=['Gene_Symbol', 'exposure', 'outcome']+[pqtltype+"-Pqtl_"+x for x in Formeta.columns if x not in ['Gene_Symbol', 'exposure', 'outcome'] ]
         
         Formeta=Formeta.fillna("NA")
         allmr_pvalues_dirhetpleio=allmr_pvalues_dirhetpleio.fillna("NA")
