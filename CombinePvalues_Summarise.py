@@ -60,7 +60,7 @@ def merge_files(files_withdict,prefix1):
     
     min_pvaluecolumns=[x for x in master_df.columns if "_LwestPvalue" in x ]
     master_df[f"{prefix1}_Significant_count"]=master_df[min_pvaluecolumns].apply(lambda row: (row < 0.000099).sum(), axis=1)
-    pvalue_columns=sorted([ x for x in cis_df.columns if 'Gene_Symbol' not in x and "Significant_count" not in x])
+    pvalue_columns=sorted([ x for x in master_df.columns if 'Gene_Symbol' not in x and "Significant_count" not in x])
     master_df=master_df[['Gene_Symbol']+pvalue_columns+[f"{prefix1}_Significant_count"]]
     filtered_df = master_df[(master_df[pvalue_columns] < 0.000099).any(axis=1)]
     out_exceellName=f"{prefix1}_Biogen_Decode_MR.xlsx"
@@ -118,3 +118,6 @@ save_dataframe_to_excel_with_highlighting(master_df, "Biogen_Decode_SCZ_BIP_Depr
 save_dataframe_to_excel_with_highlighting(filtered_df, "Biogen_Decode_SCZ_BIP_Depression_BritishMR_Pipeline_Pvzlue_0.000099.xls")
 
 filtered_df.to_csv("Biogen_Decode_SCZ_BIP_Depression_BritishMR_Pipeline_Pvzlue_0.000099.csv",index=None)
+
+
+
