@@ -20,7 +20,6 @@ filename_dict={"ADHD2022_iPSYCH_deCODE_PGC.meta_GRCh38_UniqID.vcf.gz":"PGC_ADHD2
               "PGC3_SCZ_wave3.european.autosome.public.v3_GRCh38_UniqID.vcf.gz":"PGC3_SCZ",
               "daner_MDDwoBP_20201001_2015iR15iex_HRC_MDDwoBP_iPSYCH2015i_Wray_FinnGen_MVPaf_2_HRC_MAF01_GRCh38_UniqID.vcf.gz":"Depression_iPSYCH_2023"}
 
-n=0
 result_df=pd.DataFrame()
 
 for rscript in rscripts:
@@ -31,7 +30,8 @@ for rscript in rscripts:
         os.system(f'''sed '/prefix="cis_exposure"/c\prefix="{pqtltype}_{name}_{r_prefix}"' {rscript} > {pqtltype}_{name}_{rscript}''')
         os.system(f'''sed -i 's/PGC3_SCZ_wave3.european.autosome.public.v3_GRCh38_UniqID.vcf/{file}/g' {pqtltype}_{name}_{rscript} ''')
         os.system(f'''sed 's/Rscript/Rscript {pqtltype}_{name}_{rscript}/' MRAnalysis_sbatch_command.sh > {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ''')
-        
+
+        n=0
         for i in range(0,50):
             temp_df=df[df["exposure"].isin(exposure_list[n:n+41])]
             result_df=pd.concat([temp_df,result_df])
