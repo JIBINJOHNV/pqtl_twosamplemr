@@ -96,7 +96,7 @@ TransWithoutmhc_files_df=merge_files(TransWithoutmhc_files_dict,"TransWithoutMHC
 
 ##TransNoMHC
 TransWithoutmhcUnique_files_dict = {
-    'Biogen_Decode_pQTL_PGC3_SCZ_TransExposureNoMHCUnique_CompleteMR_AnalysisResults_WithselectedColumns_MetapAnalysis.csv': "SCZ_ransNoMHCUnique_", 
+    'Biogen_Decode_pQTL_PGC3_SCZ_TransExposureNoMHCUnique_CompleteMR_AnalysisResults_WithselectedColumns_MetapAnalysis.csv': "SCZ_TransNoMHCUnique_", 
     'Biogen_Decode_pQTL_Depression_iPSYCH_2023_TransExposureNoMHCUnique_CompleteMR_AnalysisResults_WithselectedColumns_MetapAnalysis.csv': "Depression_TransNoMHCUnique_", 
     'Biogen_Decode_pQTL_BIP_PGC3_noukb_TransExposureNoMHCUnique_CompleteMR_AnalysisResults_WithselectedColumns_MetapAnalysis.csv': "BIP_TransNoMHCUnique_"}
 TransWithoutmhcUnique_files_df=merge_files(TransWithoutmhcUnique_files_dict,"TransWithoutMHCUnique")
@@ -118,6 +118,3 @@ save_dataframe_to_excel_with_highlighting(master_df, "Biogen_Decode_SCZ_BIP_Depr
 save_dataframe_to_excel_with_highlighting(filtered_df, "Biogen_Decode_SCZ_BIP_Depression_BritishMR_Pipeline_Pvzlue_0.000099.xls")
 
 filtered_df.to_csv("Biogen_Decode_SCZ_BIP_Depression_BritishMR_Pipeline_Pvzlue_0.000099.csv",index=None)
-
-
-
