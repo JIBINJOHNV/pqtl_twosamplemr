@@ -9,7 +9,7 @@ rscripts=glob.glob("TransExposureNoMHCUnique_MRAnalysis_Running.R")
 basedir=os.getcwd()+"/"
 print(rscripts)
 
-file=f"{basedir}CombinedResultsfromAllBatches/Biogen_All_significannt_trans_exposure_AfterQC_LDclumping_NoMHC_Unique.csv"
+file=f"{basedir}CombinedResultsfromAllBatches/{pqtltype}_All_significannt_trans_exposure_AfterQC_LDclumping_NoMHC_Unique.csv"
 df=pd.read_csv(file)
 df=df.sort_values(by=["exposure","ID"]).reset_index(drop="index")
 exposure_list=list(df["exposure"].unique())
@@ -20,6 +20,8 @@ filename_dict={"ADHD2022_iPSYCH_deCODE_PGC.meta_GRCh38_UniqID.vcf.gz":"PGC_ADHD2
               "PGC3_SCZ_wave3.european.autosome.public.v3_GRCh38_UniqID.vcf.gz":"PGC3_SCZ",
               "daner_MDDwoBP_20201001_2015iR15iex_HRC_MDDwoBP_iPSYCH2015i_Wray_FinnGen_MVPaf_2_HRC_MAF01_GRCh38_UniqID.vcf.gz":"Depression_iPSYCH_2023"}
 
+n=0
+result_df=pd.DataFrame()
 
 for rscript in rscripts:
     r_prefix=rscript.replace("_MRAnalysis_Running.R","")
@@ -42,5 +44,4 @@ for rscript in rscripts:
             os.system(f"sbatch --output={pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command-%j.out {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ")
             os.chdir(basedir)
         os.system(f"rm {pqtltype}_{name}_{rscript} {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh")
-
 
