@@ -24,21 +24,16 @@ for rscript in rscripts:
         os.system(f'''sed '/prefix="cis_exposure"/c\prefix="{pqtltype}_{name}_{r_prefix}"' {rscript} > {pqtltype}_{name}_{rscript}''')
         os.system(f'''sed -i 's/PGC3_SCZ_wave3.european.autosome.public.v3_GRCh38_UniqID.vcf/{file}/g' {pqtltype}_{name}_{rscript} ''')
         os.system(f'''sed 's/Rscript/Rscript {pqtltype}_{name}_{rscript}/' MRAnalysis_sbatch_command.sh > {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ''')
-        
-        if "TransExposureNoMHCUnique" in rscript:
-            for i in range(0,50):
-                Dir=f"{basedir}Part{i}/"
-                os.system(f"cp {pqtltype}_{name}_{rscript} {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh {Dir}")
-                os.chdir(Dir)
-                df=pd.read_csv("All_significannt_trans_exposure_AfterQC_LDclumping_MHCRemoval.csv")
-                count_df=df.groupby("ID")["seqnames"].count().reset_index()
-                count_uniq=count_df[count_df["seqnames"]==1]
-                count_uniq=count_uniq.rename(columns={'seqnames':"Count"})
-                df=pd.merge(df,count_uniq,on="ID").drop("Count",axis=1)
-                df.to_csv("All_significannt_trans_exposure_AfterQC_LDclumping_NoMHC_Unique.csv")
-                os.system(f"sbatch --output={pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command-%j.out {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh  ")
-                os.chdir(basedir)
-        else:
+       
+for rscript in rscripts:
+    r_prefix=rscript.replace("_MRAnalysis_Running.R","")
+    for file,name in filename_dict.items():
+        file=file.replace(".gz","")
+        os.system(f'''sed '/prefix="cis_exposure"/c\prefix="{pqtltype}_{name}_{r_prefix}"' {rscript} > {pqtltype}_{name}_{rscript}''')
+        os.system(f'''sed -i 's/PGC3_SCZ_wave3.european.autosome.public.v3_GRCh38_UniqID.vcf/{file}/g' {pqtltype}_{name}_{rscript} ''')
+        os.system(f'''sed 's/Rscript/Rscript {pqtltype}_{name}_{rscript}/' MRAnalysis_sbatch_command.sh > {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ''')
+       
+        if "TransExposureNoMHCUnique" not in rscript:
             for i in range(0,50):
                 Dir=f"{basedir}Part{i}/"
                 os.system(f"cp {pqtltype}_{name}_{rscript} {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh {Dir}")
@@ -46,4 +41,5 @@ for rscript in rscripts:
                 os.system(f"sbatch --output={pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command-%j.out {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ")
                 os.chdir(basedir)
         os.system(f"rm {pqtltype}_{name}_{rscript} {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh")
+
 
