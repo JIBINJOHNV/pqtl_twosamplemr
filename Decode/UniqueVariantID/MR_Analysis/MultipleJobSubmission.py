@@ -10,19 +10,12 @@ filename_dict={"ADHD2022_iPSYCH_deCODE_PGC.meta_GRCh38_UniqID.vcf.gz":"PGC_ADHD2
               "daner_bip_pgc3_nm_noukbiobank_GRCh38_UniqID.vcf.gz":"BIP_PGC3_noukb",
               "iPSYCH-PGC_ASD_Nov2017_GRCh38_UniqID.vcf.gz":"ASD_PGC",
               "PGC3_SCZ_wave3.european.autosome.public.v3_GRCh38_UniqID.vcf.gz":"PGC3_SCZ",
-              "PGC_UKB_depression_genome-wide_GRCh38_UniqID.vcf.gz":"PGC_MDD_Depression"}
+              "PGC_UKB_depression_genome-wide_GRCh38_UniqID.vcf.gz":"PGC_MDD_Depression",
+              "pgcAN2.2019-07.vcf._GRCh38_UniqID.vcf.gz":"PGC_AN2"}
 
 basedir=os.getcwd()+"/"
 print(rscripts)
 
-for rscript in rscripts:
-    r_prefix=rscript.replace("_MRAnalysis_Running.R","")
-    for file,name in filename_dict.items():
-        file=file.replace(".gz","")
-        os.system(f'''sed '/prefix="cis_exposure"/c\prefix="{pqtltype}_{name}_{r_prefix}"' {rscript} > {pqtltype}_{name}_{rscript}''')
-        os.system(f'''sed -i 's/PGC3_SCZ_wave3.european.autosome.public.v3_GRCh38_UniqID.vcf/{file}/g' {pqtltype}_{name}_{rscript} ''')
-        os.system(f'''sed 's/Rscript/Rscript {pqtltype}_{name}_{rscript}/' MRAnalysis_sbatch_command.sh > {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ''')
-  
 for rscript in rscripts:
     r_prefix=rscript.replace("_MRAnalysis_Running.R","")
     for file,name in filename_dict.items():
@@ -39,3 +32,5 @@ for rscript in rscripts:
                 os.system(f"sbatch --output={pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command-%j.out {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ")
                 os.chdir(basedir)
         os.system(f"rm {pqtltype}_{name}_{rscript} {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh")
+
+
