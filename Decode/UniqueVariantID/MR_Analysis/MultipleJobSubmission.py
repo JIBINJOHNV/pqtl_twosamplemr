@@ -25,6 +25,7 @@ for rscript in rscripts:
         os.system(f'''sed 's/Rscript/Rscript {pqtltype}_{name}_{rscript}/' MRAnalysis_sbatch_command.sh > {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ''')
         
         if "TransExposureNoMHCUnique" not in rscript:
+            print(script)
             for i in range(0,50):
                 Dir=f"{basedir}Part{i}/"
                 os.system(f"cp {pqtltype}_{name}_{rscript} {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh {Dir}")
