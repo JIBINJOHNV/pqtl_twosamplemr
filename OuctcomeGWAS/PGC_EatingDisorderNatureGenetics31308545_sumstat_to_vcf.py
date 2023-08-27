@@ -28,8 +28,8 @@ os.system("mv 28169268 an2019.readme.pdf")
 
 
 
-os.system('zgrep -v "##" pgcAN2.2019-07.vcf.tsv.gz  > pgcAN2.2019-07.vcf.tsv')
-filename="pgcAN2.2019-07.vcf.tsv" #location /edgehpc/dept/human_genetics/users/jjohn1/Outcome_GWAS/PGC_EatingDisorder
+os.system('zgrep -v "##" pgcAN2.2019-07.vcf.tsv.gz  > pgcAN2.2019-07.tsv')
+filename="pgcAN2.2019-07.tsv" #location /edgehpc/dept/human_genetics/users/jjohn1/Outcome_GWAS/PGC_EatingDisorder
 fdf=pd.read_csv(filename,sep="\t")
 
 
@@ -122,37 +122,40 @@ df=df[df["INFO"].str.contains("EUR")]
 
 format_df=df[ID].str.split(":",expand=True)
 df["ID"]=np.where(df["ID"].str.contains("rs"),df["ID"],df["#CHROM"].astype(str)+"_"+df["POS"].astype(str)+"_"+df["REF"]+"_"+df["ALT"])
+df["INFO"]=df["INFO"].str.replace("EUR","AF")
 format_df[6]=df["ID"]
+format_df[7]=df["INFO"].str.replace("AF=","")
 format_df=format_df.astype("str")
-df[ID]=format_df[0]+":"+format_df[1]+":"+format_df[2]+":"+format_df[3]+":"+format_df[4]+":"+format_df[5]+":"+format_df[6]
+df[ID]=format_df[0]+":"+format_df[1]+":"+format_df[2]+":"+format_df[3]+":"+format_df[4]+":"+format_df[5]+":"+format_df[6]+":"+format_df[7]
 
 format_df2=df["FORMAT"].str.split(":",expand=True)
 format_df2[6]="ID"
-df['FORMAT']=format_df2[0]+":"+format_df2[1]+":"+format_df2[2]+":"+format_df2[3]+":"+format_df2[4]+":"+format_df2[5]+":"+format_df2[6]
+format_df2[7]="AF"
+df['FORMAT']=format_df2[0]+":"+format_df2[1]+":"+format_df2[2]+":"+format_df2[3]+":"+format_df2[4]+":"+format_df2[5]+":"+format_df2[6]+":"+format_df2[7]
 df['FORMAT'].str.split(":",expand=True).isna().sum()
 df[ID].str.split(":",expand=True).isna().sum()
 print(df)
 
-df.to_csv(f"{path}/{filename[:-3]}_GRCh38_rsid156.tab",sep="\t",index=None)
-os.system(f"cat {path}/{filename[:-3]}_GRCh38_rsid156_header.txt {path}/{filename[:-3]}_GRCh38_rsid156.tab | bgzip -c > {path}/{filename[:-3]}_GRCh38_rsid156.vcf.gz ")
-os.system(f'tabix -f -p vcf  {path}/{filename[:-3]}_GRCh38_rsid156.vcf.gz')
+df.to_csv(f"{path}/{filename[:-3]}_GRCh38_rsid156_1kgEUR_VAF.tab",sep="\t",index=None)
+os.system(f"cat {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF_header.txt {path}/{filename[:-3]}_GRCh38_rsid156_1kgEUR_VAF.tab | bgzip -c > {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF.gz ")
+os.system(f'tabix -f -p vcf  {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF.gz')
 
 
 ##Replace rsid with Uniqid
 df["ID"]=df["#CHROM"].astype(str)+"_"+df["POS"].astype(str)+"_"+df["REF"]+"_"+df["ALT"]
 format_df[6]=df["ID"]
 format_df=format_df.astype("str")
-df[ID]=format_df[0]+":"+format_df[1]+":"+format_df[2]+":"+format_df[3]+":"+format_df[4]+":"+format_df[5]+":"+format_df[6]
+df[ID]=format_df[0]+":"+format_df[1]+":"+format_df[2]+":"+format_df[3]+":"+format_df[4]+":"+format_df[5]+":"+format_df[6]+":"+format_df[7]
 
 df['FORMAT'].str.split(":",expand=True).isna().sum()
 df[ID].str.split(":",expand=True).isna().sum()
 print(df)
 
-df.to_csv(f"{path}/{filename[:-3]}_GRCh38_UniqID.tab",sep="\t",index=None)
-os.system(f"cat {path}/{filename[:-3]}_GRCh38_rsid156_header.txt {path}/{filename[:-3]}_GRCh38_UniqID.tab | bgzip -c > {path}/{filename[:-3]}_GRCh38_UniqID.vcf.gz ")
-os.system(f'tabix -f -p vcf  {path}/{filename[:-3]}_GRCh38_UniqID.vcf.gz')
-os.system(f" rm {path}/{filename[:-3]}_GRCh38_rsid156_header.txt {path}/{filename[:-3]}_GRCh38_UniqID.tab {path}/{filename[:-3]}_GRCh38_rsid156.tab  ")
-os.system(f"rm {path}/{filename[:-3]}.vcf.gz* {path}/{filename[:-3]}_GRCh38.vcf.gz*")
+df.to_csv(f"{path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF.tab",sep="\t",index=None)
+os.system(f"cat {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF_header.txt {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF.tab | bgzip -c > {path}/{filename[:-4]}_GRCh38_UniqID.vcf.gz ")
+os.system(f'tabix -f -p vcf  {path}/{filename[:-4]}_GRCh38_UniqID.vcf.gz')
+os.system(f" rm {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF_header.txt {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF.tab {path}/{filename[:-4]}_GRCh38_rsid156_1kgEUR_VAF.tab  ")
+os.system(f"rm {path}/{filename[:-4]}.vcf.gz* {path}/{filename[:-4]}_GRCh38.vcf.gz*")
 
 
 
