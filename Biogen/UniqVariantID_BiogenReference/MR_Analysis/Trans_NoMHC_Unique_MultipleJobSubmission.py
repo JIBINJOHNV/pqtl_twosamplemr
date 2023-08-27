@@ -21,7 +21,7 @@ filename_dict={"ADHD2022_iPSYCH_deCODE_PGC.meta_GRCh38_UniqID.vcf.gz":"PGC_ADHD2
               "iPSYCH-PGC_ASD_Nov2017_GRCh38_UniqID.vcf.gz":"ASD_PGC",
               "PGC3_SCZ_wave3.european.autosome.public.v3_GRCh38_UniqID.vcf.gz":"PGC3_SCZ",
               "daner_MDDwoBP_20201001_2015iR15iex_HRC_MDDwoBP_iPSYCH2015i_Wray_FinnGen_MVPaf_2_HRC_MAF01_GRCh38_UniqID.vcf.gz":"Depression_iPSYCH_2023",
-              "pgcAN2.2019-07.vcf._GRCh38_UniqID.vcf.gz":"PGC_AN2"}
+              "pgcAN2.2019-07_GRCh38_UniqID.vcf.gz":"PGC_AN2"}
 
 result_df=pd.DataFrame()
 
