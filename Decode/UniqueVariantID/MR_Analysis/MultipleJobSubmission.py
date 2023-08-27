@@ -3,7 +3,7 @@ import numpy as np
 import os,glob
 
 
-rscripts=glob.glob("*_MRAnalysis_Running.R")
+rscripts=['TransExposureNoMHC_MRAnalysis_Running.R', 'TransExposure_MRAnalysis_Running.R', 'CisExposure_MRAnalysis_Running.R']
 pqtltype="Decode"
 
 filename_dict={"ADHD2022_iPSYCH_deCODE_PGC.meta_GRCh38_UniqID.vcf.gz":"PGC_ADHD2022_iPSYCH_deCODE",
@@ -11,7 +11,7 @@ filename_dict={"ADHD2022_iPSYCH_deCODE_PGC.meta_GRCh38_UniqID.vcf.gz":"PGC_ADHD2
               "iPSYCH-PGC_ASD_Nov2017_GRCh38_UniqID.vcf.gz":"ASD_PGC",
               "PGC3_SCZ_wave3.european.autosome.public.v3_GRCh38_UniqID.vcf.gz":"PGC3_SCZ",
               "PGC_UKB_depression_genome-wide_GRCh38_UniqID.vcf.gz":"PGC_MDD_Depression",
-              "pgcAN2.2019-07.vcf._GRCh38_UniqID.vcf.gz":"PGC_AN2"}
+              "pgcAN2.2019-07_GRCh38_UniqID.vcf.gz":"PGC_AN2"}
 
 basedir=os.getcwd()+"/"
 print(rscripts)
