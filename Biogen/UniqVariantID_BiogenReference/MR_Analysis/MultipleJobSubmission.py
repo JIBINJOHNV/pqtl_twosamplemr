@@ -4,7 +4,8 @@ import numpy as np
 import os,glob
 
 
-rscripts=glob.glob("*_MRAnalysis_Running.R")
+rscripts=['TransExposureNoMHC_MRAnalysis_Running.R', 'TransExposure_MRAnalysis_Running.R', 'CisExposure_MRAnalysis_Running.R']
+
 pqtltype="Biogen"
 
 filename_dict={"ADHD2022_iPSYCH_deCODE_PGC.meta_GRCh38_UniqID.vcf.gz":"PGC_ADHD2022_iPSYCH_deCODE",
