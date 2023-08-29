@@ -1,39 +1,3 @@
-
-import pandas as pd
-import numpy as np
-import os,glob
-import xlsxwriter
-
-
-basedir=os.getcwd()+"/"
-pqtltype="Biogen"
-gwasnames=["PGC_ADHD2022_iPSYCH_deCODE","BIP_PGC3_noukb","ASD_PGC","PGC3_SCZ","Depression_iPSYCH_2023","PGC_AN2"]
-cis_trans=['TransExposureNoMHC', 'TransExposure', 'CisExposure', 'TransExposureNoMHCUnique']
-
-
-
-os.system("mkdir CombinedResultsfromAllBatches")
-for gwasname in gwasnames:
-    for cistran in cis_trans:
-        file_prefix=f"{pqtltype}_{gwasname}_{cistran}"
-        print(file_prefix)
-        unique_files=glob.glob(f"Part0/{file_prefix}_*")
-        unique_files=[x.split("/")[1] for x in unique_files ]
-        unique_files=[x for x in unique_files if x.endswith("csv")]
-        print(unique_files)
-        os.system(f"mkdir -p CombinedResultsfromAllBatches/{gwasname}/{file_prefix}")
-        file_cout=len(glob.glob(f"Part*/{file_prefix}_Harmonised_Exposure_Outcome.csv"))
-        if file_cout==50:
-            for file in unique_files:
-                Files=glob.glob(f"Part*/{file}")
-                master_df=pd.DataFrame()
-                for part_file in Files:
-                    part_file_df=pd.read_csv(part_file)
-                    master_df=pd.concat([master_df,part_file_df])
-                master_df.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/{file}",index=None)
-        else:
-            print(f"Run not yet completed only {file_prefix}Harmonised_Exposure_Outcome.csv are {file_cout}")
-
                
 for gwasname in gwasnames:
     for cistran in cis_trans:
@@ -182,23 +146,23 @@ for gwasname in gwasnames:
         allmr_pvalues_dirhetpleio=allmr_pvalues_dirhetpleio[['Gene_Symbol']+colorder]
         allmr_pvalues_dirhetpleio.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults_WithselectedColumns.csv",index=None)
         
-        #For meta analaysis
+        #For meta-analysis
         mr_pleiohetdirecton_pvaluiecolumns_2=mr_pleiohetdirecton_pvaluiecolumns.copy()
         mr_pleiohetdirecton_pvaluiecolumns_2.columns = [col if col in ['outcome', 'exposure','Gene_Symbol'] else pqtltype+"-PQTL_" +col  for col in mr_pleiohetdirecton_pvaluiecolumns_2.columns]
-
         mr_pipeline_result_pvaluiecolumns_meta=pd.merge(mr_pipeline_result_pvaluiecolumns,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="left")
         mr_pipeline_result_pvaluiecolumns_meta.columns = [col if col in ['outcome', 'exposure','Gene_Symbol'] else pqtltype+"-PQTL_" +col  for col in mr_pipeline_result_pvaluiecolumns_meta.columns]
         mr_pipeline_result_pvaluiecolumns_meta['Gene_Symbol']=mr_pipeline_result_pvaluiecolumns_meta["exposure"].str.split(":",expand=True)[0]
         mr_pipeline_result_pvaluiecolumns_meta.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_BiogenMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
-
+        
         MRIVWtest_pvaluiecolumns_meta=pd.merge(MRIVWtest_df_pvaluiecolumns,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="left")
         MRIVWtest_pvaluiecolumns_meta.columns = [col if col in ['outcome', 'exposure','Gene_Symbol'] else pqtltype+"-PQTL_" +col  for col in MRIVWtest_pvaluiecolumns_meta.columns]
         MRIVWtest_pvaluiecolumns_meta['Gene_Symbol']=MRIVWtest_pvaluiecolumns_meta["exposure"].str.split(":",expand=True)[0]
         MRIVWtest_pvaluiecolumns_meta.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
-
+        
         mrivdelta_biogen=pd.merge(mr_pipeline_result_pvaluiecolumns,MRIVWtest_df_pvaluiecolumns,on=['outcome', 'exposure'],how="outer")
         mrivdelta_biogen_mrheetdire=pd.merge(mrivdelta_biogen,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="left")
         mrivdelta_biogen_mrheetdire['Gene_Symbol']=mrivdelta_biogen_mrheetdire["exposure"].str.split(":",expand=True)[0]
+        mrivdelta_biogen_mrheetdire.columns = [col if col in ['outcome', 'exposure','Gene_Symbol'] else pqtltype+"-PQTL_" +col  for col in mrivdelta_biogen_mrheetdire.columns]
         mrivdelta_biogen_mrheetdire.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_British_IVDelta_BiogenMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
         
         ################----------------------------------------Single variant---------------------------------------------------
@@ -273,3 +237,4 @@ for gwasname in gwasnames:
             singlevariant_mr.to_excel(writer, sheet_name='Singlevariant')
             har_df.to_excel(writer, sheet_name='harmonised_data')
             significant_exposure_df.to_excel(writer, sheet_name='LDindependent_Pqtls')
+
