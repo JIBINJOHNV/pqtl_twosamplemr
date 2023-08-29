@@ -187,6 +187,7 @@ for gwasname in gwasnames:
         #For meta analaysis
         mr_pleiohetdirecton_pvaluiecolumns_2=mr_pleiohetdirecton_pvaluiecolumns.copy()
         mr_pleiohetdirecton_pvaluiecolumns_2.columns = [col if col in ['outcome', 'exposure','Gene_Symbol'] else pqtltype+"-PQTL_" +col  for col in mr_pleiohetdirecton_pvaluiecolumns_2.columns]
+        
         mr_pipeline_result_pvaluiecolumns_meta=pd.merge(mr_pipeline_result_pvaluiecolumns,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="left")
         mr_pipeline_result_pvaluiecolumns_meta.columns = [col if col in ['outcome', 'exposure','Gene_Symbol'] else pqtltype+"-PQTL_" +col  for col in mr_pipeline_result_pvaluiecolumns_meta.columns]
         mr_pipeline_result_pvaluiecolumns_meta['Gene_Symbol']=mr_pipeline_result_pvaluiecolumns_meta["exposure"].str.split(":",expand=True)[0]
@@ -275,5 +276,4 @@ for gwasname in gwasnames:
             singlevariant_mr.to_excel(writer, sheet_name='Singlevariant')
             har_df.to_excel(writer, sheet_name='harmonised_data')
             significant_exposure_df.to_excel(writer, sheet_name='LDindependent_Pqtls')
-
 
