@@ -183,12 +183,19 @@ for gwasname in gwasnames:
         allmr_pvalues_dirhetpleio.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults_WithselectedColumns.csv",index=None)
         
         #For meta analaysis
+        mr_pleiohetdirecton_pvaluiecolumns_2=mr_pleiohetdirecton_pvaluiecolumns.copy()
+        mr_pleiohetdirecton_pvaluiecolumns_2.columns = [col if col in ['outcome', 'exposure','Gene_Symbol'] else pqtltype+"-PQTL_" +col  for col in mr_pleiohetdirecton_pvaluiecolumns_2.columns]
+
         mr_pipeline_result_pvaluiecolumns_meta=pd.merge(mr_pipeline_result_pvaluiecolumns,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="left")
+        mr_pipeline_result_pvaluiecolumns_meta.columns = [col if col in ['outcome', 'exposure','Gene_Symbol'] else pqtltype+"-PQTL_" +col  for col in mr_pipeline_result_pvaluiecolumns_meta.columns]
         mr_pipeline_result_pvaluiecolumns_meta['Gene_Symbol']=mr_pipeline_result_pvaluiecolumns_meta["exposure"].str.split(":",expand=True)[0]
         mr_pipeline_result_pvaluiecolumns_meta.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_BiogenMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
+
         MRIVWtest_pvaluiecolumns_meta=pd.merge(MRIVWtest_df_pvaluiecolumns,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="left")
+        MRIVWtest_pvaluiecolumns_meta.columns = [col if col in ['outcome', 'exposure','Gene_Symbol'] else pqtltype+"-PQTL_" +col  for col in MRIVWtest_pvaluiecolumns_meta.columns]
         MRIVWtest_pvaluiecolumns_meta['Gene_Symbol']=MRIVWtest_pvaluiecolumns_meta["exposure"].str.split(":",expand=True)[0]
         MRIVWtest_pvaluiecolumns_meta.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
+
         mrivdelta_biogen=pd.merge(mr_pipeline_result_pvaluiecolumns,MRIVWtest_df_pvaluiecolumns,on=['outcome', 'exposure'],how="outer")
         mrivdelta_biogen_mrheetdire=pd.merge(mrivdelta_biogen,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="left")
         mrivdelta_biogen_mrheetdire['Gene_Symbol']=mrivdelta_biogen_mrheetdire["exposure"].str.split(":",expand=True)[0]
