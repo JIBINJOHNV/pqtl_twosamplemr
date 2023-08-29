@@ -6,7 +6,7 @@ import xlsxwriter
 
 
 basedir=os.getcwd()+"/"
-pqtltype="Biogen"
+pqtltype="Decode"
 gwasnames=["PGC_ADHD2022_iPSYCH_deCODE","BIP_PGC3_noukb","ASD_PGC","PGC3_SCZ","Depression_iPSYCH_2023","PGC_AN2"]
 cis_trans=['TransExposureNoMHC', 'TransExposure', 'CisExposure', 'TransExposureNoMHCUnique']
 
