@@ -253,6 +253,11 @@ for gwasname in gwasnames:
         file_paths = {'CisExposure': f"CombinedResultsfromAllBatches/{pqtltype}_All_significannt_cis_exposure_AfterQC_LDclumping.csv",'TransExposure': f"CombinedResultsfromAllBatches/{pqtltype}_All_significannt_trans_exposure_AfterQC_LDclumping.csv",'TransExposureNoMHC': f"CombinedResultsfromAllBatches/{pqtltype}_All_significannt_trans_exposure_AfterQC_LDclumping_MHCRemoval.csv",'TransExposureNoMHCUnique': f"CombinedResultsfromAllBatches/{pqtltype}_All_significannt_trans_exposure_AfterQC_LDclumping_NoMHC_Unique.csv"}
         significant_exposure_df = pd.read_csv(file_paths[cistran])
         significant_exposure_df.drop([x for x in significant_exposure_df.columns if "Unnamed" in x   ],axis=1,inplace=True)
+
+        mrivdelta_Decode_mrheetdire=mrivdelta_Decode_mrheetdire[['Gene_Symbol']+[x for x in mrivdelta_Decode_mrheetdire.columns if 'Gene_Symbol' not in x]]
+        allmr_pvalues_dirhetpleio=allmr_pvalues_dirhetpleio[['Gene_Symbol']+[x for x in allmr_pvalues_dirhetpleio.columns if 'Gene_Symbol' not in x]]
+        britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO=britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO[['Gene_Symbol']+[x for x in britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO.columns if 'Gene_Symbol' not in x]]
+        singlevariant_mr=singlevariant_mr[['Gene_Symbol']+[x for x in singlevariant_mr.columns if 'Gene_Symbol' not in x]]
         
         with pd.ExcelWriter(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults.xlsx", engine='xlsxwriter') as writer:
             mrivdelta_biogen_mrheetdire.to_excel(writer, sheet_name='biogen_british')
