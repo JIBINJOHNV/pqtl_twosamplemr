@@ -1,3 +1,41 @@
+
+import pandas as pd
+import numpy as np
+import os,glob
+import xlsxwriter
+
+warnings.filterwarnings("ignore", message="A value is trying to be set on a copy of a slice from a DataFrame.")
+pd.options.mode.chained_assignment = None  # default='warn'
+
+basedir=os.getcwd()+"/"
+pqtltype="Biogen"
+gwasnames=["PGC_ADHD2022_iPSYCH_deCODE","BIP_PGC3_noukb","ASD_PGC","PGC3_SCZ","Depression_iPSYCH_2023","PGC_AN2"]
+cis_trans=['TransExposureNoMHC', 'TransExposure', 'CisExposure', 'TransExposureNoMHCUnique']
+
+
+
+os.system("mkdir CombinedResultsfromAllBatches")
+for gwasname in gwasnames:
+    for cistran in cis_trans:
+        file_prefix=f"{pqtltype}_{gwasname}_{cistran}"
+        print(file_prefix)
+        unique_files=glob.glob(f"Part0/{file_prefix}_*")
+        unique_files=[x.split("/")[1] for x in unique_files ]
+        unique_files=[x for x in unique_files if x.endswith("csv")]
+        print(unique_files)
+        os.system(f"mkdir -p CombinedResultsfromAllBatches/{gwasname}/{file_prefix}")
+        file_cout=len(glob.glob(f"Part*/{file_prefix}_Harmonised_Exposure_Outcome.csv"))
+        if file_cout==50:
+            for file in unique_files:
+                Files=glob.glob(f"Part*/{file}")
+                master_df=pd.DataFrame()
+                for part_file in Files:
+                    part_file_df=pd.read_csv(part_file)
+                    master_df=pd.concat([master_df,part_file_df])
+                master_df.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/{file}",index=None)
+        else:
+            print(f"Run not yet completed only {file_prefix}Harmonised_Exposure_Outcome.csv are {file_cout}")
+
                
 for gwasname in gwasnames:
     for cistran in cis_trans:
@@ -146,7 +184,7 @@ for gwasname in gwasnames:
         allmr_pvalues_dirhetpleio=allmr_pvalues_dirhetpleio[['Gene_Symbol']+colorder]
         allmr_pvalues_dirhetpleio.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults_WithselectedColumns.csv",index=None)
         
-        #For meta-analysis
+        #For meta analaysis
         mr_pleiohetdirecton_pvaluiecolumns_2=mr_pleiohetdirecton_pvaluiecolumns.copy()
         mr_pleiohetdirecton_pvaluiecolumns_2.columns = [col if col in ['outcome', 'exposure','Gene_Symbol'] else pqtltype+"-PQTL_" +col  for col in mr_pleiohetdirecton_pvaluiecolumns_2.columns]
         mr_pipeline_result_pvaluiecolumns_meta=pd.merge(mr_pipeline_result_pvaluiecolumns,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="left")
@@ -224,10 +262,10 @@ for gwasname in gwasnames:
         file_paths = {'CisExposure': f"CombinedResultsfromAllBatches/{pqtltype}_All_significannt_cis_exposure_AfterQC_LDclumping.csv",'TransExposure': f"CombinedResultsfromAllBatches/{pqtltype}_All_significannt_trans_exposure_AfterQC_LDclumping.csv",'TransExposureNoMHC': f"CombinedResultsfromAllBatches/{pqtltype}_All_significannt_trans_exposure_AfterQC_LDclumping_MHCRemoval.csv",'TransExposureNoMHCUnique': f"CombinedResultsfromAllBatches/{pqtltype}_All_significannt_trans_exposure_AfterQC_LDclumping_NoMHC_Unique.csv"}
         significant_exposure_df = pd.read_csv(file_paths[cistran])
         significant_exposure_df.drop([x for x in significant_exposure_df.columns if "Unnamed" in x   ],axis=1,inplace=True)
-
-        mrivdelta_Decode_mrheetdire=mrivdelta_Decode_mrheetdire[['Gene_Symbol']+[x for x in mrivdelta_Decode_mrheetdire.columns if 'Gene_Symbol' not in x]]
+        
+        mrivdelta_biogen_mrheetdire=mrivdelta_biogen_mrheetdire[['Gene_Symbol']+[x for x in mrivdelta_biogen_mrheetdire.columns if 'Gene_Symbol' not in x]]
         allmr_pvalues_dirhetpleio=allmr_pvalues_dirhetpleio[['Gene_Symbol']+[x for x in allmr_pvalues_dirhetpleio.columns if 'Gene_Symbol' not in x]]
-        britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO=britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO[['Gene_Symbol']+[x for x in britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO.columns if 'Gene_Symbol' not in x]]
+        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO=britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO[['Gene_Symbol']+[x for x in britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.columns if 'Gene_Symbol' not in x]]
         singlevariant_mr=singlevariant_mr[['Gene_Symbol']+[x for x in singlevariant_mr.columns if 'Gene_Symbol' not in x]]
         
         with pd.ExcelWriter(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults.xlsx", engine='xlsxwriter') as writer:
@@ -237,4 +275,5 @@ for gwasname in gwasnames:
             singlevariant_mr.to_excel(writer, sheet_name='Singlevariant')
             har_df.to_excel(writer, sheet_name='harmonised_data')
             significant_exposure_df.to_excel(writer, sheet_name='LDindependent_Pqtls')
+
 
