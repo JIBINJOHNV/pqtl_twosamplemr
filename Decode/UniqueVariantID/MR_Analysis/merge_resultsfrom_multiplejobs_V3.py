@@ -6,7 +6,7 @@ import xlsxwriter
 
 
 basedir=os.getcwd()+"/"
-pqtltype="Decode"
+pqtltype="Biogen"
 gwasnames=["PGC_ADHD2022_iPSYCH_deCODE","BIP_PGC3_noukb","ASD_PGC","PGC3_SCZ","Depression_iPSYCH_2023","PGC_AN2"]
 cis_trans=['TransExposureNoMHC', 'TransExposure', 'CisExposure', 'TransExposureNoMHCUnique']
 
@@ -116,8 +116,8 @@ for gwasname in gwasnames:
         mr_pipeline_result=pd.concat([wald,inv]).drop_duplicates()
         mr_pipeline_result.drop("type",axis=1,inplace=True)
         mr_pipeline_result.rename(columns={'b':'Beta','se':'SE','pval':'Pvalue'},inplace=True)
-        mr_pipeline_result.columns=["exposure" ,"outcome"]+[gwasname+"_Decode_"+x for x in mr_pipeline_result.columns if x not in ["outcome" ,"exposure"]]
-        mr_pipeline_result_pvaluiecolumns=mr_pipeline_result[['exposure', 'outcome',gwasname+"_Decode_Pvalue",gwasname+"_Decode_Beta", gwasname+"_Decode_SE",gwasname+"_Decode_method", gwasname+"_Decode_nsnp",gwasname+"_Decode_snp"]]
+        mr_pipeline_result.columns=["exposure" ,"outcome"]+[gwasname+"_Biogen_"+x for x in mr_pipeline_result.columns if x not in ["outcome" ,"exposure"]]
+        mr_pipeline_result_pvaluiecolumns=mr_pipeline_result[['exposure', 'outcome',gwasname+"_Biogen_Pvalue",gwasname+"_Biogen_Beta", gwasname+"_Biogen_SE",gwasname+"_Biogen_method", gwasname+"_Biogen_nsnp",gwasname+"_Biogen_snp"]]
         
         ################################-------------------------- Mendelian randomisation all test
         MRAlltest_files=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*MendelianRandomization_AllTest.csv")[0]
@@ -154,45 +154,45 @@ for gwasname in gwasnames:
         
         #########Merge With All columns
         twosamplemr_MRPRESSO=pd.merge(mr_het_ple_dir,MRPRESSO_raw_df,on=["outcome" ,"exposure"],how="outer")
-        Decode_british_ivwdelta=pd.merge(mr_pipeline_result,MRIVWtest_df,on=["outcome" ,"exposure"],how="outer")
-        britishall_Decode_britishivwdelta=pd.merge(MRAlltest_Result_df,Decode_british_ivwdelta,on=["outcome", "exposure"],how="outer")
-        britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO=pd.merge(twosamplemr_MRPRESSO,britishall_Decode_britishivwdelta,on=["outcome", "exposure"],how="outer")
-        colorder=list(britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO.columns)
-        britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO["Gene_Symbol"]=britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO["exposure"].str.split("_",expand=True)[0]
-        britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO=britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO[['Gene_Symbol']+colorder]
-        britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults.csv",index=None)
+        biogen_british_ivwdelta=pd.merge(mr_pipeline_result,MRIVWtest_df,on=["outcome" ,"exposure"],how="outer")
+        britishall_biogen_britishivwdelta=pd.merge(MRAlltest_Result_df,biogen_british_ivwdelta,on=["outcome", "exposure"],how="outer")
+        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO=pd.merge(twosamplemr_MRPRESSO,britishall_biogen_britishivwdelta,on=["outcome", "exposure"],how="outer")
+        colorder=list(britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.columns)
+        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO["Gene_Symbol"]=britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO["exposure"].str.split(":",expand=True)[0]
+        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO=britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO[['Gene_Symbol']+colorder]
+        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults.csv",index=None)
         
         ##Merge only selected important columns
         mr_pleiohet_pvaluiecolumns=pd.merge(pleio_pvaluiecolumns,het_2_pvaluiecolumns,on=['outcome', 'exposure'],how="outer")
         mr_pleiohetdirecton_pvaluiecolumns=pd.merge(mr_pleiohet_pvaluiecolumns,dirction_pvaluiecolumns,on=['outcome', 'exposure'],how="outer")
-        Decode_british_ivwDelta=pd.merge(mr_pipeline_result_pvaluiecolumns,MRIVWtest_df_pvaluiecolumns,on=["exposure","outcome"],how="outer")
-        Decode_british_ivwDelta_allbritish=pd.merge(Decode_british_ivwDelta,MRAlltest_Result_df_pvaluiecolumns,on=["exposure","outcome"],how="outer")
-        Decode_british_ivwDelta_allbritish_presso=pd.merge(Decode_british_ivwDelta_allbritish,MRPRESSO_raw_df_pvaluiecolumns,on=["exposure","outcome"],how="outer")
-        allmr_pvalues=pd.merge(Decode_british_ivwDelta_allbritish_presso,MR_Analysis_pvaluiecolumns,on=['outcome', 'exposure'],how="outer")
+        biogen_british_ivwDelta=pd.merge(mr_pipeline_result_pvaluiecolumns,MRIVWtest_df_pvaluiecolumns,on=["exposure","outcome"],how="outer")
+        biogen_british_ivwDelta_allbritish=pd.merge(biogen_british_ivwDelta,MRAlltest_Result_df_pvaluiecolumns,on=["exposure","outcome"],how="outer")
+        biogen_british_ivwDelta_allbritish_presso=pd.merge(biogen_british_ivwDelta_allbritish,MRPRESSO_raw_df_pvaluiecolumns,on=["exposure","outcome"],how="outer")
+        allmr_pvalues=pd.merge(biogen_british_ivwDelta_allbritish_presso,MR_Analysis_pvaluiecolumns,on=['outcome', 'exposure'],how="outer")
         
-        no_pvaluecolumns=[gwasname+'_Decode_nsnp',gwasname+'_BritishMR-IVWDelta_nSNPs',gwasname+'_BritishMR_nSNPs',gwasname+'_TwoSampleMR_nsnps',
-                        gwasname+'_Decode_snp',gwasname+'_BritishMR-IVWDelta_SNPs',gwasname+'_BritishMR_SNPs',gwasname+'_BritishMR-IVWDelta_Heter.Stat',gwasname+'_Decode_method']
+        no_pvaluecolumns=[gwasname+'_Biogen_nsnp',gwasname+'_BritishMR-IVWDelta_nSNPs',gwasname+'_BritishMR_nSNPs',gwasname+'_TwoSampleMR_nsnps',
+                        gwasname+'_Biogen_snp',gwasname+'_BritishMR-IVWDelta_SNPs',gwasname+'_BritishMR_SNPs',gwasname+'_BritishMR-IVWDelta_Heter.Stat',gwasname+'_Biogen_method']
         
         allmr_pvalues_pvaluesonly=allmr_pvalues.drop(no_pvaluecolumns,axis=1)
         allmr_pvalues_nopvalues=allmr_pvalues[no_pvaluecolumns]
         allmr_pvalues=pd.concat([allmr_pvalues_pvaluesonly,allmr_pvalues_nopvalues],axis=1)
         allmr_pvalues_dirhetpleio=pd.merge(allmr_pvalues,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="outer")
         colorder=list(allmr_pvalues_dirhetpleio.columns)
-        allmr_pvalues_dirhetpleio["Gene_Symbol"]=allmr_pvalues_dirhetpleio["exposure"].str.split("_",expand=True)[0]
+        allmr_pvalues_dirhetpleio["Gene_Symbol"]=allmr_pvalues_dirhetpleio["exposure"].str.split(":",expand=True)[0]
         allmr_pvalues_dirhetpleio=allmr_pvalues_dirhetpleio[['Gene_Symbol']+colorder]
         allmr_pvalues_dirhetpleio.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults_WithselectedColumns.csv",index=None)
         
         #For meta analaysis
         mr_pipeline_result_pvaluiecolumns_meta=pd.merge(mr_pipeline_result_pvaluiecolumns,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="left")
-        mr_pipeline_result_pvaluiecolumns_meta['Gene_Symbol']=mr_pipeline_result_pvaluiecolumns_meta["exposure"].str.split("_",expand=True)[0]
+        mr_pipeline_result_pvaluiecolumns_meta['Gene_Symbol']=mr_pipeline_result_pvaluiecolumns_meta["exposure"].str.split(":",expand=True)[0]
         mr_pipeline_result_pvaluiecolumns_meta.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_BiogenMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
         MRIVWtest_pvaluiecolumns_meta=pd.merge(MRIVWtest_df_pvaluiecolumns,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="left")
         MRIVWtest_pvaluiecolumns_meta['Gene_Symbol']=MRIVWtest_pvaluiecolumns_meta["exposure"].str.split(":",expand=True)[0]
         MRIVWtest_pvaluiecolumns_meta.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
         mrivdelta_biogen=pd.merge(mr_pipeline_result_pvaluiecolumns,MRIVWtest_df_pvaluiecolumns,on=['outcome', 'exposure'],how="outer")
-        mrivdelta_Decode_mrheetdire=pd.merge(mrivdelta_biogen,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="left")
-        mrivdelta_Decode_mrheetdire['Gene_Symbol']=mrivdelta_Decode_mrheetdire["exposure"].str.split("_",expand=True)[0]
-        mrivdelta_Decode_mrheetdire.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_British_IVDelta_BiogenMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
+        mrivdelta_biogen_mrheetdire=pd.merge(mrivdelta_biogen,mr_pleiohetdirecton_pvaluiecolumns,on=['outcome', 'exposure'],how="left")
+        mrivdelta_biogen_mrheetdire['Gene_Symbol']=mrivdelta_biogen_mrheetdire["exposure"].str.split(":",expand=True)[0]
+        mrivdelta_biogen_mrheetdire.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_British_IVDelta_BiogenMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
         
         ################----------------------------------------Single variant---------------------------------------------------
         ##Metafixed
@@ -224,22 +224,22 @@ for gwasname in gwasnames:
         biogen=biogen.rename(columns={"snp":"SNP"})
         biogen=biogen[['exposure', 'outcome','SNP','method', 'nsnp','b', 'se', 'pval','lo_ci', 'up_ci', 'or', 'or_lci95', 'or_uci95', 'egger_intercept','se.egger', 'pval.egger', 'snp_r2.exposure', 'snp_r2.outcome','correct_causal_direction', 'steiger_pval', 'steigerflag']]
         biogen=biogen.rename(columns={'b':"Beta", 'se':"SE", 'pval':"Pvalue"})
-        biogen.columns=['exposure', 'outcome','SNP']+[ "Decode_"+x for x in biogen.columns if x not in ['exposure', 'outcome','SNP']]
+        biogen.columns=['exposure', 'outcome','SNP']+[ "Biogen_"+x for x in biogen.columns if x not in ['exposure', 'outcome','SNP']]
         
         TwoSampleMR_meta_wald=pd.merge(TwoSampleMR_wald_df,TwoSampleMR_metafixed_df,on=['exposure', 'outcome', 'samplesize', 'SNP'],how="outer")
         singlevariant_mr=pd.merge(TwoSampleMR_meta_wald,biogen,on=['exposure','outcome','SNP'],how="outer")
         singlevariant_mr.drop("samplesize",axis=1,inplace=True)
-        singlevariant_mr["Gene_Symbol"]=singlevariant_mr["exposure"].str.split("_",expand=True)[0]
+        singlevariant_mr["Gene_Symbol"]=singlevariant_mr["exposure"].str.split(":",expand=True)[0]
         singlevariant_mr_columns=['Gene_Symbol','exposure','outcome','SNP','TwosampleMR-wald_Beta','TwosampleMR-wald_SE','TwosampleMR-wald_Pvalue','TwosampleMR-metafixed_Beta',
-                                'TwosampleMR-metafixed_SE','TwosampleMR-metafixed_Pvalue','Decode_method','Decode_nsnp','Decode_Beta','Decode_SE','Decode_Pvalue',
-                                'Decode_lo_ci', 'Decode_up_ci', 'Decode_or', 'Decode_or_lci95', 'Decode_or_uci95', 'Decode_egger_intercept', 'Decode_se.egger', 'Decode_pval.egger', 
-                                'Decode_snp_r2.exposure', 'Decode_snp_r2.outcome', 'Decode_correct_causal_direction', 'Decode_steiger_pval', 'Decode_steigerflag']
+                                'TwosampleMR-metafixed_SE','TwosampleMR-metafixed_Pvalue','Biogen_method','Biogen_nsnp','Biogen_Beta','Biogen_SE','Biogen_Pvalue',
+                                'Biogen_lo_ci', 'Biogen_up_ci', 'Biogen_or', 'Biogen_or_lci95', 'Biogen_or_uci95', 'Biogen_egger_intercept', 'Biogen_se.egger', 'Biogen_pval.egger', 
+                                'Biogen_snp_r2.exposure', 'Biogen_snp_r2.outcome', 'Biogen_correct_causal_direction', 'Biogen_steiger_pval', 'Biogen_steigerflag']
         
         singlevariant_mr=singlevariant_mr[singlevariant_mr_columns]
         singlevariant_mr.to_csv(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_SingleVariant_CompleteMR_AnalysisResults.csv",index=None)
-        mrivdelta_Decode_mrheetdire=mrivdelta_Decode_mrheetdire.fillna("NA")
+        mrivdelta_biogen_mrheetdire=mrivdelta_biogen_mrheetdire.fillna("NA")
         allmr_pvalues_dirhetpleio=allmr_pvalues_dirhetpleio.fillna("NA")
-        britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO=britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO.fillna("NA")
+        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO=britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.fillna("NA")
         singlevariant_mr=singlevariant_mr.fillna("NA")
         
         #Harmonised data
@@ -253,16 +253,17 @@ for gwasname in gwasnames:
         file_paths = {'CisExposure': f"CombinedResultsfromAllBatches/{pqtltype}_All_significannt_cis_exposure_AfterQC_LDclumping.csv",'TransExposure': f"CombinedResultsfromAllBatches/{pqtltype}_All_significannt_trans_exposure_AfterQC_LDclumping.csv",'TransExposureNoMHC': f"CombinedResultsfromAllBatches/{pqtltype}_All_significannt_trans_exposure_AfterQC_LDclumping_MHCRemoval.csv",'TransExposureNoMHCUnique': f"CombinedResultsfromAllBatches/{pqtltype}_All_significannt_trans_exposure_AfterQC_LDclumping_NoMHC_Unique.csv"}
         significant_exposure_df = pd.read_csv(file_paths[cistran])
         significant_exposure_df.drop([x for x in significant_exposure_df.columns if "Unnamed" in x   ],axis=1,inplace=True)
-
-        mrivdelta_Decode_mrheetdire=mrivdelta_Decode_mrheetdire[['Gene_Symbol']+[x for x in mrivdelta_Decode_mrheetdire.columns if 'Gene_Symbol' not in x]]
+        
+        mrivdelta_biogen_mrheetdire=mrivdelta_biogen_mrheetdire[['Gene_Symbol']+[x for x in mrivdelta_biogen_mrheetdire.columns if 'Gene_Symbol' not in x]]
         allmr_pvalues_dirhetpleio=allmr_pvalues_dirhetpleio[['Gene_Symbol']+[x for x in allmr_pvalues_dirhetpleio.columns if 'Gene_Symbol' not in x]]
-        britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO=britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO[['Gene_Symbol']+[x for x in britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO.columns if 'Gene_Symbol' not in x]]
+        britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO=britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO[['Gene_Symbol']+[x for x in britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.columns if 'Gene_Symbol' not in x]]
         singlevariant_mr=singlevariant_mr[['Gene_Symbol']+[x for x in singlevariant_mr.columns if 'Gene_Symbol' not in x]]
         
         with pd.ExcelWriter(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}_CompleteMR_AnalysisResults.xlsx", engine='xlsxwriter') as writer:
-            mrivdelta_Decode_mrheetdire.to_excel(writer, sheet_name='Decode_british')
+            mrivdelta_biogen_mrheetdire.to_excel(writer, sheet_name='biogen_british')
             allmr_pvalues_dirhetpleio.to_excel(writer, sheet_name='All_MR_Pvalues')
-            britishall_Decode_britishivwdelta_twosamplemr_MRPRESSO.to_excel(writer, sheet_name='Complete_MR_Results')
+            britishall_biogen_britishivwdelta_twosamplemr_MRPRESSO.to_excel(writer, sheet_name='Complete_MR_Results')
             singlevariant_mr.to_excel(writer, sheet_name='Singlevariant')
             har_df.to_excel(writer, sheet_name='harmonised_data')
             significant_exposure_df.to_excel(writer, sheet_name='LDindependent_Pqtls')
+
