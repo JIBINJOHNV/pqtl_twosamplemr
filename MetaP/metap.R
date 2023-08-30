@@ -48,9 +48,9 @@ for (gwasname in gwasnames) {
             teest<-unlist(as.vector(MRIVWtest_df[indx,]))
             metap_MRIVWtest<-c(metap_MRIVWtest,allmetap(teest,method="sumlog")$p[[1]] )
             }
-
-    MRIVWtest_nomiss$metap_MRIVWtest<-metap_MRIVWtest
-    MRIVWtest_miss$metap_MRIVWtest<-"NA"
+   
+    MRIVWtest_nomiss[glue("{gwasname}_metap_MRIVWtest")]<-metap_MRIVWtest
+    MRIVWtest_miss[glue("{gwasname}_metap_MRIVWtest")]<-"NA"
     decode_biogen <- rbind(MRIVWtest_nomiss,MRIVWtest_miss)
 
     out_name<-substr(prefix, 1, nchar(prefix) - 55)
@@ -71,10 +71,16 @@ for (gwasname in gwasnames) {
     sixth_cols <- colnames(decode_biogen[, grep("Heter.Stat$", colnames(decode_biogen))])
     seventh_cols <- colnames(decode_biogen[, grep("IVWDelta_SE$", colnames(decode_biogen))])
 
-    new_order <- c(c("Gene_Symbol","outcome"), first_cols, c("metap_MRIVWtest"), second_cols,third_cols,fourth_cols,fifth_cols,sixth_cols,seventh_cols,
-                    setdiff(colnames(decode_biogen), c("Gene_Symbol","outcome", first_cols,"metap_MRIVWtest", second_cols,third_cols,fourth_cols,fifth_cols,sixth_cols,seventh_cols)))
+    new_order <- c(c("Gene_Symbol","outcome"), first_cols, c(glue("{gwasname}_metap_MRIVWtest")), second_cols,third_cols,fourth_cols,fifth_cols,sixth_cols,seventh_cols,
+                    setdiff(colnames(decode_biogen), c("Gene_Symbol","outcome", first_cols,glue("{gwasname}_metap_MRIVWtest"), second_cols,third_cols,fourth_cols,fifth_cols,sixth_cols,seventh_cols)))
 
     decode_biogen_reordered_df <- decode_biogen[, new_order]
+
+    if (grepl("CisExposure_" ,prefix )) {decode_biogen_reordered_df <- decode_biogen_reordered_df %>%rename_with(~ paste("CIS", ., sep = "_"), -c("Gene_Symbol", "outcome")) }
+    if (grepl("TransExposure_British_",prefix )) {decode_biogen_reordered_df <- decode_biogen_reordered_df %>%rename_with(~ paste("TransExposure", ., sep = "_"), -c("Gene_Symbol", "outcome")) }
+    if (grepl("TransExposureNoMHC_" ,prefix )) {decode_biogen_reordered_df <- decode_biogen_reordered_df %>%rename_with(~ paste("TransExposureNoMHC", ., sep = "_"), -c("Gene_Symbol", "outcome")) }
+    if (grepl("TransExposureNoMHCUnique_" ,prefix )) {decode_biogen_reordered_df <- decode_biogen_reordered_df %>%rename_with(~ paste("TransExposureNoMHCUnique", ., sep = "_"), -c("Gene_Symbol", "outcome")) }
+
     write.csv(decode_biogen_reordered_df, glue("Biogen_Decode_pQTL_{gwasname}_{out_name}_MetapAnalysis.csv"), row.names = FALSE)
 
 
