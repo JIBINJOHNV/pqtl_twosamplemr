@@ -89,6 +89,7 @@ Exposures.sort()
 
 
 
+
 for exposure in Exposures:
     single_selectd=mr_single[mr_single['id.exposure']==exposure].sort_values(by="SNP")
     mr2_selectd=mr_df[mr_df['id.exposure']==exposure]
@@ -99,11 +100,36 @@ for exposure in Exposures:
     selected_df['se']=selected_df['se'].round(3)
     selected_df['P']=selected_df['P'].apply(to_scientific)
     
-    fp.forestplot(selected_df, estimate="b",moerror="se",ll="lo", hl="up",varlabel="SNP",decimal_precision=3,
-                ci_report=False,color_alt_rows=True,flush=False,table=True,groupvar="group",
-                rightannote=['P', 'b','up', 'lo',"nSNP"],
-                right_annoteheaders=["Pvalue", "Beta", "Up_CI","Low_CI","nSNP"],
-                sort=True,**{"marker": "D", "markersize": 35,  "xlinestyle": (0, (10, 5)), "xlinecolor": "#808080", "xtick_size": 12}   )
+    if selected_df.shape[0]<=29:
+        fp.forestplot(selected_df, estimate="b",moerror="se",ll="lo", hl="up",varlabel="SNP",decimal_precision=3,
+                    ci_report=False,color_alt_rows=True,flush=False,table=True,groupvar="group",
+                    rightannote=['P', 'b','up', 'lo',"nSNP"],
+                    right_annoteheaders=["Pvalue", "Beta", "Up_CI","Low_CI","nSNP"],
+                    sort=True,**{"marker": "D", "markersize": 35,  "xlinestyle": (0, (10, 5)), "xlinecolor": "#808080", "xtick_size": 12}   )
+        plt.savefig(f"TransNoMHC_BiogenDecode_Pqtl_{Disease}_{exposure}_plot.png", bbox_inches="tight")
     
-    plt.savefig(f"TransNoMHC_BiogenDecode_Pqtl_{Disease}_{exposure}_plot.png", bbox_inches="tight")
+    if selected_df.shape[0]>=29:
+        try:
+            biogen=selected_df[selected_df["SNP"].str.contains("Biogen")]
+            
+            fp.forestplot(biogen, estimate="b",moerror="se",ll="lo", hl="up",varlabel="SNP",decimal_precision=3,
+                    ci_report=False,color_alt_rows=True,flush=False,table=True,groupvar="group",
+                    rightannote=['P', 'b','up', 'lo',"nSNP"],
+                    right_annoteheaders=["Pvalue", "Beta", "Up_CI","Low_CI","nSNP"],
+                    sort=True,**{"marker": "D", "markersize": 35,  "xlinestyle": (0, (10, 5)), "xlinecolor": "#808080", "xtick_size": 12}   )
+            plt.savefig(f"TransNoMHC_BiogenDecode_Pqtl_{Disease}_{exposure}_BiogenPqtl_plot.png", bbox_inches="tight")
+        except:
+            pass
+        
+        try:
+            decode=selected_df[selected_df["SNP"].str.contains("Decode")]
+            fp.forestplot(decode, estimate="b",moerror="se",ll="lo", hl="up",varlabel="SNP",decimal_precision=3,
+                    ci_report=False,color_alt_rows=True,flush=False,table=True,groupvar="group",
+                    rightannote=['P', 'b','up', 'lo',"nSNP"],
+                    right_annoteheaders=["Pvalue", "Beta", "Up_CI","Low_CI","nSNP"],
+                    sort=True,**{"marker": "D", "markersize": 35,  "xlinestyle": (0, (10, 5)), "xlinecolor": "#808080", "xtick_size": 12}   )
+            plt.savefig(f"TransNoMHC_BiogenDecode_Pqtl_{Disease}_{exposure}_DecodePqtl_plot.png", bbox_inches="tight")
+        except:
+            pass
+
 
