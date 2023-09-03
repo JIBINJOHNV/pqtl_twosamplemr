@@ -101,7 +101,7 @@ os.system(f'zgrep  "##" {path}/{filename[:-4]}_GRCh38_rsid156.vcf.gz > {path}/{f
 
 df=pd.read_csv(f"{path}/{filename[:-4]}_GRCh38_rsid156.tab",sep="\t")
 format_df2=df["FORMAT"].str.split(":",expand=True)
-format_df2[7]="ID"
+format_df2[7]=df["ID"]
 df["FORMAT"]=format_df2[0]+":"+format_df2[1]+":"+format_df2[2]+":"+format_df2[3]+":"+format_df2[4]+":"+format_df2[5]+":"+format_df2[6]+":"+format_df2[7]
 
 format_df=df[ID].str.split(":",expand=True)
