@@ -63,9 +63,8 @@ def  single_mr(pqtl_type,excell):
     mr_df2['nSNP']="_"
     
     har_df=pd.read_excel(excell,sheet_name="harmonised_data")
-    har_df.rename(columns={"gene.exposure":"id.exposure"},inplace=True)
-    har_df=har_df[["SNP","eaf.exposure","id.exposure"]].drop_duplicates()
-    har_df.rename(columns={"eaf.exposure":"EAF"},inplace=True)
+    har_df=har_df[["SNP","eaf.exposure","gene.exposure"]].drop_duplicates()
+    har_df.rename(columns={"eaf.exposure":"EAF","gene.exposure":"id.exposure"},inplace=True)
     if pqtl_type=="biogen":
         har_df["SNP"]="Biogen_"+har_df["SNP"]
     elif pqtl_type=="decode":
