@@ -5,6 +5,8 @@ gwases = ["ASD_PGC", "BIP_PGC3_noukb", "Depression_iPSYCH_2023", "PGC3_SCZ", "PG
 pqtl_types = ["Biogen", "Decode"]
 exposure_types=["TransExposureNoMHC","CisExposure"]
 
+excel_writer = pd.ExcelWriter("NonUniqVariants_Pvalue_0.001.xlsx", engine="xlsxwriter")
+
 for gwas in gwases:
     final_result_df=pd.DataFrame(columns=['Gene_Symbol', 'SNP'])
     for exposure_type in exposure_types:
@@ -47,4 +49,9 @@ for gwas in gwases:
         sixth_columns = [x for x in final_result_df.columns if "eaf.outcome" in x]
         seventh_columns = [x for x in final_result_df.columns if x not in first_columns + second_columns +third_columns+forth_columns+fifth_columns+sixth_columns]
         final_result_df = final_result_df[first_columns + second_columns +third_columns+forth_columns+fifth_columns+sixth_columns+seventh_columns]
-        final_result_df.to_csv(f"{gwas}_NonUniqVariants_Pvalue_0.001.csv",index=None)
+    final_result_df.to_csv(f"{gwas}_NonUniqVariants_Pvalue_0.001.csv",index=None)
+    final_result_df.to_excel(excel_writer, sheet_name=gwas, index=False)
+
+# Save and close the Excel writer
+excel_writer.save()
+excel_writer.close()
