@@ -19,14 +19,14 @@ for (gwasname in gwasnames) {
   for (prefix in prefixes) {
     ## Decode PQTL
     decode <- read.csv(glue("{pqtltype1}_{gwasname}_{prefix}.csv"))
-    col_names <- c("exposure")
+    columns_to_rename <- c("exposure")
     new_col_names <- ifelse(columns_to_rename != "", paste0("Decode.PQTL_", columns_to_rename), columns_to_rename)
     colnames(decode)[colnames(decode) == "exposure"] <- new_col_names
 
 
     ## Biogen PQTL
     biogen <- read.csv(glue("{pqtltype2}_{gwasname}_{prefix}.csv"))
-    col_names <- colnames(biogen)
+    columns_to_rename <- colnames(biogen)
     new_col_names <- ifelse(columns_to_rename != "", paste0("Biogen.PQTL_", columns_to_rename), columns_to_rename)
     colnames(biogen)[colnames(biogen) == "exposure"] <- new_col_names
 
@@ -120,14 +120,14 @@ for (gwasname in gwasnames) {
     first_cols <- colnames(decode_biogen[, grep("IVWDelta_Pvalue$|Biogen_pval$", colnames(decode_biogen))])
     second_cols <- colnames(decode_biogen[, grep("outcome$|exposure$", colnames(decode_biogen))])
     
-    new_order <- c(
-      c("Gene_Symbol"), first_cols, c( "metap_MRIVWtest"), second_cols,
-      setdiff(colnames(decode_biogen), c("Gene_Symbol", first_cols, "metap_MRIVWtest", second_cols)))
+    new_order <- c(c("Gene_Symbol"), first_cols, c( "metap_MRIVWtest"), second_cols,
+                    setdiff(colnames(decode_biogen), c("Gene_Symbol", first_cols, "metap_MRIVWtest", second_cols)))
 
     # Define the folder name
     output_folder <- "MetaP_AnalysisResults"
     if (!file.exists(output_folder)) {dir.create(output_folder)}
     output_file <- file.path(output_folder, glue("Biogen_Decode_pQTL_{gwasname}_{outname2}_MetapAnalysis.csv"))
+    decode_biogen_reordered_df <- decode_biogen[, new_order]
     write.csv(decode_biogen_reordered_df, output_file, row.names = FALSE)
 
   }}
