@@ -6,7 +6,7 @@ library(dplyr)
 
 
 
-matching_files <- list.files(path ="/Users/jibinjohn/Downloads/BiogenUKB_Decode_Pqtl_MR/Formeta/", pattern = "Decode_PGC3_SCZ", full.names = TRUE)
+#matching_files <- list.files(path ="/Users/jibinjohn/Downloads/BiogenUKB_Decode_Pqtl_MR/Formeta/", pattern = "Decode_PGC3_SCZ", full.names = TRUE)
 
 
 gwasnames <- c("ASD_PGC","BIP_PGC3_noukb","Depression_iPSYCH_2023","PGC3_SCZ","PGC_ADHD2022_iPSYCH_deCODE","PGC_AN2"  )
