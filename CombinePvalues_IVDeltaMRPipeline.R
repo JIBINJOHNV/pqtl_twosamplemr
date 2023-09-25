@@ -111,7 +111,6 @@ for (gwasname in gwasnames) {
     annotate("text", x =3 , y = 4,label = paste('Correlation:', round(cor(MRIVWtest_df[[DecodePqtl_col]], MRIVWtest_df[[BiogenPqtl_col]]), 4)))
 
     # Save the correlation plot as a TIFF image
-    outname <- substr(prefix, 1, nchar(prefix) - 55)
     output_folder <- "correlation_plot"
     if (!file.exists(output_folder)) {dir.create(output_folder)}
     output_file <- file.path(output_folder, glue("{gwasname}_{outname2}_British_MRIVWtest_correlation_plot.tiff"))
@@ -128,7 +127,7 @@ for (gwasname in gwasnames) {
     # Define the folder name
     output_folder <- "MetaP_AnalysisResults"
     if (!file.exists(output_folder)) {dir.create(output_folder)}
-    output_file <- file.path(output_folder, glue("Biogen_Decode_pQTL_{gwasname}_{out_name}_MetapAnalysis.csv"))
+    output_file <- file.path(output_folder, glue("Biogen_Decode_pQTL_{gwasname}_{outname2}_MetapAnalysis.csv"))
     write.csv(decode_biogen_reordered_df, output_file, row.names = FALSE)
 
   }}
