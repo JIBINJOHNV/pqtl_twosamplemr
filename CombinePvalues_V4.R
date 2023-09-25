@@ -6,8 +6,10 @@ library(dplyr)
 
 
 gwasnames <- c('Depression_iPSYCH_2023', 'BIP_PGC3_noukb','PGC3_SCZ',"PGC3_SCZ_NoUKB")
-prefixes <- c("CisExposure_CompleteMR_AnalysisResults_WithselectedColumns_ForMeta", "TransExposureNoMHC_CompleteMR_AnalysisResults_WithselectedColumns_ForMeta",
-              "TransExposureNoMHCUnique_CompleteMR_AnalysisResults_WithselectedColumns_ForMeta", "TransExposure_CompleteMR_AnalysisResults_WithselectedColumns_ForMeta")
+prefixes <- c("CisExposure_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta",
+               "TransExposureNoMHCUnique_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta", 
+              "TransExposureNoMHC_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta", 
+              "TransExposure_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta")
 
 pqtltype1 <- "Decode"
 pqtltype2 <- "Biogen"
