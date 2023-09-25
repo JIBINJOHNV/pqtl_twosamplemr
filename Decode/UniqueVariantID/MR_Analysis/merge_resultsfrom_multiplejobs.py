@@ -5,7 +5,7 @@ import os,glob
 
 basedir=os.getcwd()+"/"
 pqtltype="Decode"
-gwasnames=['Depression_iPSYCH_2023','BIP_PGC3_noukb','PGC3_SCZ']
+gwasnames=['Depression_iPSYCH_2023','BIP_PGC3_noukb','PGC3_SCZ',"PGC3_SCZ_NoUKB"]
 cis_trans=['TransExposureNoMHC', 'TransExposure', 'CisExposure', 'TransExposureNoMHCUnique']
 
 os.system("mkdir CombinedResultsfromAllBatches")
