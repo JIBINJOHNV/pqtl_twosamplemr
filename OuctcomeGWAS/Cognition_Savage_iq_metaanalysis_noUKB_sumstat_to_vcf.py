@@ -138,6 +138,7 @@ os.system(f"cat {path}/{filename[:-4]}_GRCh38_rsid156_header.txt {path}/{filenam
 os.system(f'tabix -f -p vcf  {path}/{filename[:-4]}_GRCh38_UniqID.vcf.gz')
 
 df2=pd.concat([df.iloc[:,0:5],format_df],axis=1).iloc[:,:-1]
+df2['LP']=np.power(10,-df2['LP'])
 df2.to_csv(f"{path}/{filename[:-4]}_GRCh38_UniqID_ForMeta.tsv",sep="\t",index=None)
 
 
