@@ -118,7 +118,7 @@ for chr in range(2,23):
 #df=pd.read_csv("regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.txt",sep=" ")
 
 os.system("gzip regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.txt")
-
+os.system("cp regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.txt.gz /mnt/depts/dept04/human_genetics/users/jjohn1/Outcome_GWAS/Cognition/Cognition_UKB/")
 
 
 
