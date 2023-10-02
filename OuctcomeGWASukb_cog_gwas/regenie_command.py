@@ -111,7 +111,7 @@ echo """#!/bin/bash
 
 os.system(f''' cp regenie_ukb_step2_linear_model2_chr1_fiall_baseline_irnt.regenie regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.txt''')
 
-for chr in range(1,23):
+for chr in range(2,23):
     os.system(f"""awk 'FNR>1 {{print $0}}' regenie_ukb_step2_linear_model2_chr{chr}_fiall_baseline_irnt.regenie >> regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.txt""")
 
 
