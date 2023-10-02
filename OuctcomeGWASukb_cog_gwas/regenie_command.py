@@ -14,11 +14,11 @@ geenotype_file="/edgehpc/dept/compbio/human_genetics/ukbb_temp/Release2/Genotype
 
 
 
-##To th the family and individual ids of the file ukbb500k
+##To find the family and individual ids of the file ukbb500k
 os.system("plink2 --pfile  /edgehpc/dept/compbio/human_genetics/ukbb_temp/Release2/Genotyped/ukb_chrauto_v2_snpqc --make-bed --out ukb_chrauto_v2_snpqc")
 
 
-#identify the common samples pesent in ukbb500k and UKB_PPP
+#identify the common samples present in ukbb500k and UKB_PPP
 UKB_PPP_fam_df=pd.read_csv(UKB_PPP_fam,sep="\t",header=None)
 UKB_PPP_fam_df.columns=["ukpp_FID", "ukpp_IID","ukpp_PID","ukpp_MID","ukpp_sex","ukpp_disease"]
 
@@ -34,7 +34,7 @@ ukbb500k_UKB_PPP_df=pd.merge(ukbb500k_fam_df,UKB_PPP_fam_df,left_on=["ukbb_FID",
 ukbb500k_UKB_specific_df=ukbb500k_UKB_PPP_df[ukbb500k_UKB_PPP_df["ukpp_IID"].isna()].iloc[:,0:2]
 
 
-##Identify individula with cognitive phenotype that are not part of 
+##Identify individula with cognitive phenotypes that are not part of 
 cog_phenotype_df=pd.read_csv(cog_phenotype,sep=" ")
 cog_phenotype_withoutUKB_PPP_df=pd.merge(ukbb500k_UKB_specific_df,cog_phenotype_df,left_on=["ukbb_FID","ukbb_IID"],
                                           right_on=["FID","IID"]).drop(["ukbb_FID","ukbb_IID"],axis=1)
@@ -115,12 +115,20 @@ for chr in range(2,23):
     os.system(f"""awk 'FNR>1 {{print $0}}' regenie_ukb_step2_linear_model2_chr{chr}_fiall_baseline_irnt.regenie >> regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.txt""")
 
 
-os.system("gzip regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.txt")
-os.system(f"""echo "CHR BP SNP A1 A2 FREQA1 INFO BETA SE LOG10P P" > regenie_ukb_step2_linear_model2_fiall_baseline.regenie.info6maf005.summary.txt""")
-os.system(f"""zcat regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.txt.gz | \
-              awk 'FNR>1{{if($6>=0.005 && $6<0.995 && $7>0.6) print $1,$2,$3,$5,$4,$6,$7,$9,$10,$12,10^(-1*$12)}}' >> \
-              regenie_ukb_step2_linear_model2_fiall_baseline.regenie.info6maf005.summary.txt""")
+#df=pd.read_csv("regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.txt",sep=" ")
 
+os.system("gzip regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.txt")
+
+
+
+
+
+###### Filtering will be done during sumstat to vcf conversion time
+
+#os.system(f"""echo "CHR BP SNP A1 A2 FREQA1 INFO BETA SE LOG10P P" > regenie_ukb_step2_linear_model2_fiall_baseline.regenie.info6maf005.summary.txt""")
+#os.system(f"""zcat regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.txt.gz | \
+#              awk 'FNR>1{{if($6>=0.005 && $6<0.995 && $7>0.6) print $1,$2,$3,$5,$4,$6,$7,$9,$10,$12,10^(-1*$12)}}' >> \
+#              regenie_ukb_step2_linear_model2_fiall_baseline.regenie.info6maf005.summary.txt""")
 
 
 ################ PC calculation
