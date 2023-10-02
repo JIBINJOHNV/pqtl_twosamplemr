@@ -1,0 +1,151 @@
+/mnt/depts/dept04/human_genetics/users/jjohn1/Outcome_GWAS/Cognition/generic-metal/METAL/build/bin/metal
+MetaAnalysis Helper - (c) 2007 - 2009 Goncalo Abecasis
+This version released on 2020-05-05
+
+# This program faciliates meta-analysis of genome-wide association studies.
+# Commonly used commands are listed below:
+#
+# Options for describing input files ...
+#   SEPARATOR        [WHITESPACE|COMMA|BOTH|TAB] (default = WHITESPACE)
+#   COLUMNCOUNTING   [STRICT|LENIENT]            (default = 'STRICT')
+#   MARKERLABEL      [LABEL]                     (default = 'MARKER')
+#   ALLELELABELS     [LABEL1 LABEL2]             (default = 'ALLELE1','ALLELE2')
+#   EFFECTLABEL      [LABEL|log(LABEL)]          (default = 'EFFECT')
+#   FLIP
+#
+# Options for filtering input files ...
+#   ADDFILTER        [LABEL CONDITION VALUE]     (example = ADDFILTER N > 10)
+#                    (available conditions are <, >, <=, >=, =, !=, IN)
+#   REMOVEFILTERS
+#
+# Options for sample size weighted meta-analysis ...
+#   WEIGHTLABEL      [LABEL]                     (default = 'N')
+#   PVALUELABEL      [LABEL]                     (default = 'PVALUE')
+#   DEFAULTWEIGHT    [NUMBER]                    (default = 1.0)
+#   MINWEIGHT        [NUMBER]                    (default = 1.0)
+#
+# Options for inverse variance weighted meta-analysis ...
+#   STDERRLABEL      [LABEL]                     (default = 'STDERR')
+#   SCHEME           [SAMPLESIZE|STDERR]         (default = SAMPLESIZE)
+#
+# Options to enable tracking of allele frequencies ...
+#   AVERAGEFREQ      [ON|OFF]                    (default = OFF)
+#   MINMAXFREQ       [ON|OFF]                    (default = OFF)
+#   FREQLABEL        [LABEL]                     (default = 'FREQ')
+#
+# Options to enable tracking of user defined variables ...
+#   CUSTOMVARIABLE   [VARNAME]
+#   LABEL            [VARNAME] AS [HEADER]
+#
+# Options to enable tracking of chromosomes and positions ...
+#   TRACKPOSITIONS   [ON|OFF]                    (default = OFF
+#   CHROMOSOMELABEL  [LABEL]                     (default = 'CHROMOSOME')
+#   POSITIONLABEL    [LABEL]                     (default = 'POSITION')
+#
+# Options to enable explicit strand information ...
+#   USESTRAND        [ON|OFF]                    (default = OFF)
+#   STRANDLABEL      [LABEL]                     (default = 'STRAND')
+#
+# Automatic genomic control correction of input statistics ...
+#   GENOMICCONTROL   [ON|OFF|VALUE|LIST snps.txt](default = OFF)
+#
+# Options to account for samples overlap ...
+#   OVERLAP          [ON|OFF]                    (default = OFF)
+#   ZCUTOFF          [NUMBER]                    (default = 1.0)
+#
+# Options for general analysis control ...
+#   PROCESSFILE            [FILENAME]
+#   OUTFILE                [PREFIX SUFFIX]       (default = 'METAANALYSIS','.TBL')
+#   MAXWARNINGS            [NUMBER]              (default = 20)
+#   VERBOSE                [ON|OFF]              (default = 'OFF')
+#   LOGPVALUE              [ON|OFF]              (default = 'OFF')
+#   EFFECT_PRINT_PRECISION [NUMBER]              (default = '4')
+#   STDERR_PRINT_PRECISION [NUMBER]              (default = '4')
+#   ANALYZE                [HETEROGENEITY]
+#   CLEAR
+
+# Options for general run control ...
+#   SOURCE           [SCRIPTFILE]
+#   RETURN
+#   QUIT
+
+#THIS SCRIPT EXECUTES AN ANALYSIS OF EIGHT STUDIES
+#THE RESULTS FOR EACH STUDY ARE STORED IN FILES Inputfile1.txt THROUGH Inputfile8.txt
+
+#LOAD THE FIRST EIGHT INPUT FILES
+
+# UNCOMMENT THE NEXT LINE TO ENABLE GenomicControl CORRECTION
+# GENOMICCONTROL ON
+
+# === DESCRIBE AND PROCESS THE FIRST INPUT FILE ===
+MARKER ID
+ALL## Set marker header to ID ...
+ELE REF ALT
+E## Set allele headers to REF and ALT ...
+FFECT ES
+## Set effect header to ES ...
+STDERR SE
+PVA## Set standard error header to SE ...
+LUE LP
+WE## Set p-value header to LP ...
+IGHT SS
+F## Set weight header to SS ...
+REQ AF
+SE## Set frequency header to AF ...
+## If you want frequencies to be averaged, issue the 'AVERAGEFREQ ON' command
+PARATOR  TAB
+## Set column separator to TAB ...
+PROCESS /mnt/depts/dept04/human_genetics/users/jjohn1/Outcome_GWAS/Cognition/Cognition_UKB/regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary_GRCh38_UniqID_ForMeta.tsv
+
+# ===###########################################################################
+## Processing file '/mnt/depts/dept04/human_genetics/users/jjohn1/Outcome_GWAS/Cognition/Cognition_UKB/regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary_GRCh38_UniqID_ForMeta.tsv'
+ THE SECOND INPUT FILE HAS THE SAME FORMAT AND CAN BE PROCESSE## WARNING: Marker '1_3712929_G_GCCCCTGC' duplicated in input, first instance used, others skipped
+D IMMEDIATELY ===
+PROCESS /mnt/depts/dept04/human_genetics/users/jjohn1/Outcome_GWAS/Cognition/Cognition_Savage_iq/Cognition_Savage_iq_metaanalysis_noUKB_GRCh38_UniqID_ForMeta.tsv
+
+
+OUTFILE Cognition_Me## WARNING: Marker '1_13630868_A_ACT' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_13693916_C_CAG' duplicated in input, first instance used, others skipped
+ta_GWAS_without_UKBPP .tbl
+ANALYZE HETEROGENEITY
+
+QUIT
+## WARNING: Marker '1_17320268_T_TA' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_18706649_A_AT' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_19505657_TGGA_T' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_31215080_G_GA' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_36504912_TTATGTATG_T' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_40435743_ACTGTACC_A' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_42082701_C_CTCTT' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_43320857_A_AAAAT' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_54206090_GTTTA_G' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_60646424_G_GAAAT' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_70632298_A_ATTCT' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_80901448_G_GAA' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_82876751_A_ACT' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_83751751_C_CAG' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_91916924_A_AT' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_113017259_A_ATAAT' duplicated in input, first instance used, others skipped
+## WARNING: Marker '1_113638744_AC_A' duplicated in input, first instance used, others skipped
+## WARNING: An additional 333 rows with duplicate marker names were ignored
+## Processed 10962185 markers ...
+
+###########################################################################
+## Processing file '/mnt/depts/dept04/human_genetics/users/jjohn1/Outcome_GWAS/Cognition/Cognition_Savage_iq/Cognition_Savage_iq_metaanalysis_noUKB_GRCh38_UniqID_ForMeta.tsv'
+## Processed 8088199 markers ...
+
+## Set output file prefix and suffix to Cognition_Meta_GWAS_without_UKBPP and .tbl ...
+###########################################################################
+## Running second pass analysis to evaluate heterogeneity...
+## Processing file '/mnt/depts/dept04/human_genetics/users/jjohn1/Outcome_GWAS/Cognition/Cognition_Savage_iq/Cognition_Savage_iq_metaanalysis_noUKB_GRCh38_UniqID_ForMeta.tsv'
+## Processing file '/mnt/depts/dept04/human_genetics/users/jjohn1/Outcome_GWAS/Cognition/Cognition_UKB/regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary_GRCh38_UniqID_ForMeta.tsv'
+
+###########################################################################
+## Executing meta-analysis ...
+## Complete results will be stored in file 'Cognition_Meta_GWAS_without_UKBPP1.tbl'
+## Column descriptions will be stored in file 'Cognition_Meta_GWAS_without_UKBPP1.tbl.info'
+## Completed meta-analysis for 11014520 markers!
+## Smallest p-value is 1.475e-23 at marker '3_49840680_T_C'
+
+## Clearing all stored statistics ...
+# Clearing user defined filters ...
