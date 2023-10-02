@@ -21,7 +21,7 @@ import argparse
 pd.set_option('display.float_format', '{:.2E}'.format)
 print(tempfile.gettempdir())
 
-##File location /edgehpc/dept/compbio/human_genetics/users/jjohn1/Outcome_GWAS/Cognition_UKB
+##File location /mnt/depts/dept04/human_genetics/users/jjohn1/Outcome_GWAS/Cognition/Cognition_UKB/
 
 
 #parser=argparse.ArgumentParser(description="It is for Incorporating additional information and Initial filtering of Annovar out put file")
@@ -29,7 +29,7 @@ print(tempfile.gettempdir())
 #args=parser.parse_args()
 #filename=args.filename
 os.system('zgrep -v "##" regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.txt.gz > regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.tsv')
-filename="regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.tsv" #location /edgehpc/dept/compbio/human_genetics/users/jjohn1/Outcome_GWAS/Cognition_UKB/"
+filename="regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.tsv" #location /mnt/depts/dept04/human_genetics/users/jjohn1/Outcome_GWAS/Cognition/Cognition_UKB/"
 fdf=pd.read_csv(filename,sep=" ")
 fdf=fdf[['CHROM','ID','GENPOS', 'ALLELE0', 'ALLELE1','N', 'A1FREQ', 'INFO', 'BETA', 'SE','LOG10P']]
 
