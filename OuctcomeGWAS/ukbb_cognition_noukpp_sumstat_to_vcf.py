@@ -1,14 +1,14 @@
 
 ##Before running run below mentioned unix command
 #Conda deactivate
+srun -n 2 --mem=120G --time=4:01:00 --pty bash
 module load Python/3.8.6-GCCcore-10.2.0
 module load libxml2/2.9.8-GCCcore-6.4.0
 module load OpenSSL/1.1
 module load R/4.1.3-foss-2021b
 module load GMP/6.2.1-GCCcore-11.2.0
 module load BCFtools/1.14-GCC-11.2.0
-
-#source /edgehpc/dept/human_genetics/users/jjohn1/Software/gwas2vcf/env/bin/activate
+source /edgehpc/dept/human_genetics/users/jjohn1/Software/gwas2vcf/env/bin/activate
 
 
 import pandas as pd
@@ -32,6 +32,8 @@ os.system('zgrep -v "##" regenie_ukb_step2_linear_model2_fiall_baseline.regenie.
 filename="regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary.tsv" #location /edgehpc/dept/compbio/human_genetics/users/jjohn1/Outcome_GWAS/Cognition_UKB/"
 fdf=pd.read_csv(filename,sep=" ")
 fdf=fdf[['CHROM','ID','GENPOS', 'ALLELE0', 'ALLELE1','N', 'A1FREQ', 'INFO', 'BETA', 'SE','LOG10P']]
+
+##-log10 P value to P valuee
 fdf['LOG10P']=np.power(10,-fdf['LOG10P'])
 fdf=fdf[['CHROM','ID','GENPOS','ALLELE0','ALLELE1','A1FREQ','BETA','SE','LOG10P','N','INFO']]
 
@@ -40,6 +42,8 @@ fdf3["CHROM"]=fdf3["CHROM"].astype("int").astype("str")
 fdf3[['GENPOS','N']]=fdf3[['GENPOS','N']].astype("int")
 fdf3[['A1FREQ','BETA','SE','LOG10P']]=fdf3[['A1FREQ','BETA','SE','LOG10P']].astype("float")
 fdf3=fdf3[['CHROM','GENPOS','ID','ALLELE1','ALLELE0','BETA','SE','N','LOG10P','A1FREQ','INFO']]
+
+##Remove the variants with INFO score <0.6 & MAF 0.005
 fdf3=fdf3[ ((fdf3['INFO']>=0.6 ) & (fdf3['A1FREQ']>=0.005 ) & (fdf3['A1FREQ']<0.995 ) )]
 fdf3.to_csv(f'{filename[:-4]}.tsv',sep="\t",index=None)
 
