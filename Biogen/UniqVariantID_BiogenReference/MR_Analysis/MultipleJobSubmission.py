@@ -8,7 +8,7 @@ rscripts=['TransExposureNoMHC_MRAnalysis_Running.R', 'TransExposure_MRAnalysis_R
 
 pqtltype="Biogen"
 
-filename_dict={"daner_PGC_SCZ_w3_90_0418b_ukbbdedupe.trios_GRCh38_UniqID.vcf.gz":"PGC3_SCZ_NoUKB",
+filename_dict={"Cognition_Meta_GWAS_without_UKBPP1_GRCh38_UniqID.vcf.gz":"Cognition","daner_PGC_SCZ_w3_90_0418b_ukbbdedupe.trios_GRCh38_UniqID.vcf.gz":"PGC3_SCZ_NoUKB",
               "ADHD2022_iPSYCH_deCODE_PGC.meta_GRCh38_UniqID.vcf.gz":"PGC_ADHD2022_iPSYCH_deCODE",
               "daner_bip_pgc3_nm_noukbiobank_GRCh38_UniqID.vcf.gz":"BIP_PGC3_noukb",
               "iPSYCH-PGC_ASD_Nov2017_GRCh38_UniqID.vcf.gz":"ASD_PGC",
