@@ -15,6 +15,8 @@ EFFECT ES
 PVALUE LP 
 WEIGHT SS
 SEPARATOR  TAB
+AVERAGEFREQ ON
+MINMAXFREQ ON
 PROCESS /mnt/depts/dept04/human_genetics/users/jjohn1/Outcome_GWAS/Cognition/Cognition_UKB/regenie_ukb_step2_linear_model2_fiall_baseline.regenie.summary_GRCh38_UniqID_ForMeta.tsv
 
 # === THE SECOND INPUT FILE HAS THE SAME FORMAT AND CAN BE PROCESSED IMMEDIATELY ===
