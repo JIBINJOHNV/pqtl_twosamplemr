@@ -22,7 +22,7 @@ suppressWarnings(suppressPackageStartupMessages({
 }))
 
 
-outcome_gwassumstat <- c("daner_PGC_SCZ_w3_90_0418b_ukbbdedupe.trios_GRCh38_UniqID.vcf.gz",
+outcome_gwassumstat <- c("Cognition_Meta_GWAS_without_UKBPP1_GRCh38_UniqID.vcf.gz","daner_PGC_SCZ_w3_90_0418b_ukbbdedupe.trios_GRCh38_UniqID.vcf.gz",
                         "ADHD2022_iPSYCH_deCODE_PGC.meta_GRCh38_UniqID.vcf.gz","iPSYCH-PGC_ASD_Nov2017_GRCh38_UniqID.vcf.gz",
                          "PGC_UKB_depression_genome-wide_GRCh38_UniqID.vcf.gz","daner_bip_pgc3_nm_noukbiobank_GRCh38_UniqID.vcf.gz",
                          "PGC3_SCZ_wave3.european.autosome.public.v3_GRCh38_UniqID.vcf.gz",
