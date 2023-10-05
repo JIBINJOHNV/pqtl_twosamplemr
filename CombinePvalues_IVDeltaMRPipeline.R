@@ -5,7 +5,18 @@ library(ggplot2)
 library(dplyr)
 
 
-gwasnames <- c("PGC_ADHD2022_iPSYCH_deCODE","BIP_PGC3_noukb","ASD_PGC","PGC3_SCZ","Depression_iPSYCH_2023","PGC_AN2","PGC3_SCZ_NoUKB")
+## Copy alll files for meta-analysis to ForMeta folder
+system("mkdir ForMeta")
+# List all files matching the pattern
+files_to_copy <- list.files(path = ".", pattern = "British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv", recursive = TRUE, full.names = TRUE)
+destination_dir <- "ForMeta"
+for (file in files_to_copy) {
+  dest_file <- file.path(destination_dir, basename(file))
+  file.copy(file, dest_file)}
+
+setwd("ForMeta")
+
+gwasnames <- c("PGC_ADHD2022_iPSYCH_deCODE","BIP_PGC3_noukb","ASD_PGC","Depression_iPSYCH_2023","PGC_AN2","PGC3_SCZ_NoUKB","Cognition") #"PGC3_SCZ",
 prefixes <- c("CisExposure_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta",
                "TransExposureNoMHCUnique_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta", 
               "TransExposureNoMHC_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta", 
@@ -129,5 +140,7 @@ for (gwasname in gwasnames) {
     output_file <- file.path(output_folder, glue("Biogen_Decode_pQTL_{gwasname}_{outname2}_MetapAnalysis.csv"))
     decode_biogen_reordered_df <- decode_biogen[, new_order]
     write.csv(decode_biogen_reordered_df, output_file, row.names = FALSE)
+
+    print(gwasname)
 
   }}
