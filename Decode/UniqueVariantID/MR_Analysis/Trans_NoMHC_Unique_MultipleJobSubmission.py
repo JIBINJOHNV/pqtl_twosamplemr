@@ -14,13 +14,16 @@ df=pd.read_csv(file)
 df=df.sort_values(by=["exposure","ID"]).reset_index(drop="index")
 exposure_list=list(df["exposure"].unique())
 
-filename_dict={"Cognition_Meta_GWAS_without_UKBPP1_GRCh38_UniqID.vcf.gz":"Cognition","daner_PGC_SCZ_w3_90_0418b_ukbbdedupe.trios_GRCh38_UniqID.vcf.gz":"PGC3_SCZ_NoUKB",
+filename_dict={"Cognition_Meta_GWAS_without_UKBPP1_GRCh38_UniqID.vcf.gz":"Cognition",
+               "daner_PGC_SCZ_w3_90_0418b_ukbbdedupe.trios_GRCh38_UniqID.vcf.gz":"PGC3_SCZ_NoUKB",
               "ADHD2022_iPSYCH_deCODE_PGC.meta_GRCh38_UniqID.vcf.gz":"PGC_ADHD2022_iPSYCH_deCODE",
               "daner_bip_pgc3_nm_noukbiobank_GRCh38_UniqID.vcf.gz":"BIP_PGC3_noukb",
               "iPSYCH-PGC_ASD_Nov2017_GRCh38_UniqID.vcf.gz":"ASD_PGC",
-              "PGC3_SCZ_wave3.european.autosome.public.v3_GRCh38_UniqID.vcf.gz":"PGC3_SCZ",
               "daner_MDDwoBP_20201001_2015iR15iex_HRC_MDDwoBP_iPSYCH2015i_Wray_FinnGen_MVPaf_2_HRC_MAF01_GRCh38_UniqID.vcf.gz":"Depression_iPSYCH_2023",
               "pgcAN2.2019-07_GRCh38_UniqID.vcf.gz":"PGC_AN2"}
+
+# "PGC3_SCZ_wave3.european.autosome.public.v3_GRCh38_UniqID.vcf.gz":"PGC3_SCZ",
+
 
 result_df=pd.DataFrame()
 
@@ -39,8 +42,9 @@ for rscript in rscripts:
             Dir=f"{basedir}Part{i}/"
             temp_df.to_csv(f"{Dir}All_significannt_trans_exposure_AfterQC_LDclumping_NoMHC_Unique.csv")
             os.system(f"cp {pqtltype}_{name}_{rscript} {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh {Dir}")
-            os.chdir(Dir)
-            os.system(f"sbatch --output={pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command-%j.out {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ")
-            os.chdir(basedir)
-        os.system(f"rm {pqtltype}_{name}_{rscript} {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh")
+            #os.chdir(Dir)
+            #os.system(f"sbatch --output={pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command-%j.out {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ")
+            #os.chdir(basedir)
+   os.system(f"sbatch {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ")
+        #os.system(f"rm {pqtltype}_{name}_{rscript} {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh")
 
