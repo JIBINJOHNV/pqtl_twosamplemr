@@ -6,6 +6,8 @@ import os,glob
 Files=["All_significannt_cis_exposure_AfterQC_LDclumping.csv","All_significannt_trans_exposure_AfterQC_LDclumping.csv",
        "All_significannt_trans_exposure_AfterQC_LDclumping_MHCRemoval.csv","All_significannt_CisTransexposure_BeforeQC_LDclumping.csv"]
 
+os.system(f"mkdir CombinedResultsfromAllBatches")
+
 for file in Files:
     specific_files=glob.glob(f"Part*/{file}")
     master_df=pd.DataFrame()
