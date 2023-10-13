@@ -9,7 +9,7 @@ rscripts=glob.glob("TransExposureNoMHCUnique_MRAnalysis_Running.R")
 basedir=os.getcwd()+"/"
 print(rscripts)
 
-file=f"{basedir}Decode_CombinedResultsfromAllBatches/{pqtltype}_All_significannt_trans_exposure_AfterQC_LDclumping_NoMHC_Unique.csv"
+file=f"{basedir}CombinedResultsfromAllBatches/{pqtltype}_All_significannt_trans_exposure_AfterQC_LDclumping_NoMHC_Unique.csv"
 df=pd.read_csv(file)
 df=df.sort_values(by=["exposure","ID"]).reset_index(drop="index")
 exposure_list=list(df["exposure"].unique())
