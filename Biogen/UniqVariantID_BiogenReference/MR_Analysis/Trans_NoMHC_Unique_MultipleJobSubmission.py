@@ -44,9 +44,9 @@ for rscript in rscripts:
             Dir=f"{basedir}Part{i}/"
             temp_df.to_csv(f"{Dir}All_significannt_trans_exposure_AfterQC_LDclumping_NoMHC_Unique.csv")
             os.system(f"cp {pqtltype}_{name}_{rscript} {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh {Dir}")
-            os.chdir(Dir)
-            os.system(f"sbatch --output={pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command-%j.out {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ")
-            os.chdir(basedir)
+        #os.chdir(Dir)
+        os.system(f"sbatch --output={pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command-%j.out {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh ")
+        #os.chdir(basedir)
         os.system(f"rm {pqtltype}_{name}_{rscript} {pqtltype}_{name}_{r_prefix}_MRAnalysis_sbatch_command.sh")
 
 
