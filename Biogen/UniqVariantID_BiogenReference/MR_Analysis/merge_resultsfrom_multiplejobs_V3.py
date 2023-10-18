@@ -153,6 +153,10 @@ for gwasname in gwasnames:
         presso_files=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*MendelianRandomization_Presso_Test.csv")[0]
         MRPRESSO_df=pd.read_csv(presso_files)
         MRPRESSO_df.rename(columns={"Causal Estimate":"Beta","P-value":"Pvalue"},inplace=True)
+        try:
+            MRPRESSO_df=MRPRESSO_df.drop("Unnamed: 0",axis=1)
+        except:
+            pass
         MRPRESSO_raw_df=MRPRESSO_df[MRPRESSO_df["MR Analysis"]=="Raw"].drop(["Exposure", "MR Analysis"],axis=1)
         MRPRESSO_raw_df.columns=[x.replace(" ","") for x in MRPRESSO_raw_df.columns]
         MRPRESSO_raw_df.columns=[gwasname+"_mr_presso_"+x for x in MRPRESSO_raw_df.columns if x not in ['exposure', 'outcome'] ]+['exposure', 'outcome']
