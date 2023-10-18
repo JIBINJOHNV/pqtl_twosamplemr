@@ -43,6 +43,10 @@ for gwasname in gwasnames:
         #TwoSampleMR_Analysis_Multiple_MR_Test
         TwoSampleMultipleMRTest_file=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*TwoSampleMR_Analysis_Multiple_MR_Test.csv")[0]
         TwoSampleMultipleMRTest_df=pd.read_csv(TwoSampleMultipleMRTest_file)
+        try:
+            TwoSampleMultipleMRTest_df=TwoSampleMultipleMRTest_df.drop("Unnamed: 0",axis=1)
+        except:
+            pass
         TwoSampleMultipleMRTest_df=TwoSampleMultipleMRTest_df.drop(["id.exposure", "id.outcome"],axis=1).drop_duplicates()
         TwoSampleMultipleMRTest_df=TwoSampleMultipleMRTest_df.sort_values(["outcome", "exposure","method","pval"]).drop_duplicates(subset=["outcome", "exposure", "method"],keep='first')
         TwoSampleMultipleMRTest_df["method"]=TwoSampleMultipleMRTest_df["method"].str.replace("Inverse variance weighted","IVW").str.replace("multiplicative random effects","M-RandomEffects").str.title().str.replace(" ","")
@@ -60,6 +64,10 @@ for gwasname in gwasnames:
         ####Hetrogenity
         het_file=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*TwoSampleMR_Analysis_HeterogenityTest.csv")[0]
         het=pd.read_csv(het_file)
+        try:
+            het=het.drop("Unnamed: 0",axis=1)
+        except:
+            pass
         het=het.drop(["id.exposure", "id.outcome"],axis=1)
         het=het.sort_values(["outcome", "exposure","method","Q_pval"]).drop_duplicates(subset=["outcome", "exposure", "method"],keep='first')
         het = het.drop_duplicates(subset=["outcome", "exposure", "method"],keep='first')
@@ -75,6 +83,10 @@ for gwasname in gwasnames:
         ###pleio
         hpleio_file=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*TwoSampleMR_Analysis_Hpleiotropy_Test.csv")[0]
         pleio=pd.read_csv(hpleio_file)
+        try:
+            pleio=pleio.drop("Unnamed: 0",axis=1)
+        except:
+            pass
         pleio=pleio[~pleio['exposure'].isna()]
         pleio=pleio.drop(["id.exposure", "id.outcome"],axis=1)
         pleio=pleio.sort_values(["outcome", "exposure","pval"])
@@ -85,6 +97,10 @@ for gwasname in gwasnames:
         ##Direction
         dir_file=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*TwoSampleMR_Analysis_Directionality_Test.csv")[0]
         dirction=pd.read_csv(dir_file)
+        try:
+            dirction=dirction.drop("Unnamed: 0",axis=1)
+        except:
+            pass
         dirction=dirction[~dirction['exposure'].isna()]
         dirction=dirction.drop(["id.exposure", "id.outcome"],axis=1)
         dirction=dirction.sort_values(["outcome", "exposure","steiger_pval"])
