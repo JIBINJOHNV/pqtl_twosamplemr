@@ -125,6 +125,10 @@ for gwasname in gwasnames:
         MRAlltest_files=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*MendelianRandomization_AllTest.csv")[0]
         MRAlltest_df=pd.read_csv(MRAlltest_files)
         MRAlltest_df=MRAlltest_df[~MRAlltest_df["Method"].str.contains("intercept")]
+        try:
+            MRAlltest_df=MRAlltest_df.drop('Unnamed: 0',axis=1)
+        except:
+            pass
         MRAlltest_df.columns=['Method', 'Beta', 'SE', '95%CI_Lower','95%CI_Upper','Pvalue', 'outcome','exposure', 'SNPs']
         MRAlltest_df["Method"]=MRAlltest_df["Method"].str.title().str.replace(" ","")
         MRAlltest_Result_df=MRAlltest_df.pivot(index=["outcome" ,"exposure",'SNPs'],values=['Beta', 'SE', '95%CI_Lower','95%CI_Upper','Pvalue'],columns="Method").reset_index()
