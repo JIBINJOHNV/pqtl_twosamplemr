@@ -232,6 +232,10 @@ for gwasname in gwasnames:
         ##Metafixed
         TwoSampleMR_metafixed_file=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*TwoSampleMR_Analysis_SingleVariantMetafixed_Test.csv")[0]
         meta=pd.read_csv(TwoSampleMR_metafixed_file)
+        try:
+            meta=meta.drop("Unnamed: 0",axis=1)
+        except:
+            pass
         meta=meta[meta["SNP"].str.contains("_")]
         meta=meta.drop(["id.exposure", "id.outcome"],axis=1)
         meta=meta.drop_duplicates()
@@ -242,6 +246,10 @@ for gwasname in gwasnames:
         ##Wald test
         TwoSampleMR_wald_file=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*TwoSampleMR_Analysis_SingleVariantWald_Test.csv")[0]
         wald=pd.read_csv(TwoSampleMR_wald_file)
+        try:
+            wald=wald.drop("Unnamed: 0",axis=1)
+        except:
+            pass
         wald=wald[wald["SNP"].str.contains("_")]
         wald=wald.drop(["id.exposure", "id.outcome"],axis=1)
         wald=wald.drop_duplicates()
@@ -252,6 +260,10 @@ for gwasname in gwasnames:
         ##Mr pipeline
         mr_file=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*MendelianPipelineTest.csv")[0]
         mrpipelie=pd.read_csv(mr_file)
+        try:
+            mrpipelie=mrpipelie.drop("Unnamed: 0",axis=1)
+        except:
+            pass
         mrpipelie=mrpipelie[~mrpipelie['exposure'].isna()]
         mrpipelie=mrpipelie.drop(["id.exposure", "id.outcome"],axis=1)
         biogen=mrpipelie[mrpipelie["method"]=="Wald ratio"]
@@ -279,6 +291,10 @@ for gwasname in gwasnames:
         #Harmonised data
         har_file=glob.glob(f"CombinedResultsfromAllBatches/{gwasname}/{file_prefix}/*Harmonised_Exposure_Outcome.csv")[0]
         har_df=pd.read_csv(f"{har_file}")
+        try:
+            har_df=har_df.drop("Unnamed: 0",axis=1)
+        except:
+            pass
         har_first_columns=['SNP','gene.exposure','beta.exposure','beta.outcome','se.exposure','se.outcome','pval.outcome','pval.exposure']
         har_last_columns=[x for x in har_df.columns if x not in har_first_columns ]
         har_df=har_df[har_first_columns+har_last_columns]
