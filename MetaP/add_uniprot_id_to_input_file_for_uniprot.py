@@ -13,7 +13,7 @@ biogen_df=biogen_df[~biogen_df['UKBB_PPP_exposure'].isna()]
 PqtlSource=["Decode","Biogen"]
 gwases=["Depression_iPSYCH_2023" ,"PGC3_SCZ_NoUKB" ,"Cognition" , "BIP_PGC3_noukb","PGC_ADHD2022_iPSYCH_deCODE","PGC_AN2","ASD_PGC"]
 cis_trans_decode_biogen_df=pd.DataFrame()
-pqtls=["CisExposure","TransExposureNoMHC"]
+pqtls=["CisExposure","TransExposureNoMHC",'TransExposure','TransExposureNoMHCUnique']
 
         #gwas=gwases[0]          
         #pqtl=pqtls[0]   
