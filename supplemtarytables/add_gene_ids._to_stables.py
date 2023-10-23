@@ -183,3 +183,20 @@ ubb_decode_seelected_columns=ubb_decode[['Protein','uniprot','UKBB_PPP_exposure'
             
 ubb_decode_seelected_columns.to_csv("Complete_UKBB-PPP_Deecode_protein_withcomplete_Geneinformation_SeelecteedColumns.csv",index=None)
 
+
+########
+
+biomart=biomart[['Ensembl_gene_ID', 'CHR', 'Gene_start', 'Gene_end']].drop_duplicates()
+
+nid=pd.read_csv("teest.csv")
+nid.update(nid.select_dtypes(include=['object']).fillna("NA"))
+nid['ep_action_mode']=nid['ep_action_mode'].str[:3200]
+nid['compound_name']=nid['compound_name'].str[:3200]
+nid['compound_id']=nid['compound_id'].str[:3200]
+
+nid.to_csv("Complete_UKBB-PPP_Deecode_protein_withcomplete_Geneinformation_SeelecteedColumns_Annotation_Drug.csv")
+
+test=pd.merge(nid,biomart,on=["Ensembl_gene_ID"],how="left")
+test.to_csv("Complete_UKBB-PPP_Deecode_protein_withcomplete_Geneinformation_SeelecteedColumns_Annotation_Drug.csv",index=None)
+
+
