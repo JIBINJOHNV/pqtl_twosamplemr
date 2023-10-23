@@ -29,3 +29,10 @@ for gwas in gwases:
         decomet_df=pd.merge(decomet_df,decode_df,left_on="exposure",right_on="DECODE_exposure",how="left").drop("DECODE_exposure",axis=1)
         decomet_df.to_csv(f"Decode_{gwas}_{pqtl}_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
 
+        biomet_df=pd.read_csv(f"Biogen_{gwas}_{pqtl}_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv")
+        biomet_df=pd.merge(biomet_df,biogen_df,left_on="exposure",right_on="UKBB_PPP_exposure",how="left").drop("UKBB_PPP_exposure",axis=1)
+        biomet_df.to_csv(f"Biogen_{gwas}_{pqtl}_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
+        decomet_df=pd.read_csv(f"Decode_{gwas}_{pqtl}_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv")
+        decomet_df=pd.merge(decomet_df,decode_df,left_on="exposure",right_on="DECODE_exposure",how="left").drop("DECODE_exposure",axis=1)
+        decomet_df.to_csv(f"Decode_{gwas}_{pqtl}_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta.csv",index=None)
+
