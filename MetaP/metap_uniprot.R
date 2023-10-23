@@ -12,7 +12,7 @@ library(dplyr)
 #matching_files <- list.files(path ="/Users/jibinjohn/Downloads/BiogenUKB_Decode_Pqtl_MR/Formeta/", pattern = "Decode_PGC3_SCZ", full.names = TRUE)
 
 
-gwasnames <- c("PGC3_SCZ_NoUKB","BIP_PGC3_noukb","Depression_iPSYCH_2023","ASD_PGC","PGC_ADHD2022_iPSYCH_deCODE","PGC_AN2"  )
+gwasnames <- c("PGC3_SCZ_NoUKB","BIP_PGC3_noukb","Depression_iPSYCH_2023",'Cognition',"ASD_PGC","PGC_ADHD2022_iPSYCH_deCODE","PGC_AN2"  )
 
 prefixes <- c( "CisExposure_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta",
                "TransExposureNoMHCUnique_British_IVDeltaMRPipeline_AnalysisResults_WithselectedColumns_ForMeta",
