@@ -53,7 +53,7 @@ dep_df <- subset(dep_df, select = -PHE)
 colnames(dep_df)[colnames(dep_df) == "CIS.TRANS"] <- "PHE"
 negative_dep_df <- dep_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-', 'NA,-'))
 positive_dep_df <- dep_df %>%filter(Estimate_Direction %in% c('+,NA', '+,+', 'NA,+'))
-phemirror(top=positive_dep_df, bottom =positive_dep_df,opacity=1,annotate_p = c(0.00001, 0.00001),
+phemirror(top=positive_dep_df, bottom =negative_dep_df,opacity=1,annotate_p = c(0.00001, 0.00001),
                 file = "depression_tris_trans",toptitle = "Depression Positive Beta value",bottomtitle = "Depression Negative Beta value",)
 
 
