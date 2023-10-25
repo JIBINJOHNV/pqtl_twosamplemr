@@ -17,10 +17,10 @@ positive_cis_df <- cis_df %>%filter(Estimate_Direction %in% c('+,NA', '+,+', 'NA
 negative_trans_df <- trans_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-', 'NA,-'))
 positive_trans_df <- trans_df %>%filter(Estimate_Direction %in% c('+,NA', '+,+', 'NA,+'))
 
-phemirror(top=positive_cis_df, bottom =negative_cis_df, toptitle = "PheWAS Example: Data 1",opacity=1,bottomtitle = "PheWAS Example: Data 2",
+phemirror(top=positive_cis_df, bottom =negative_cis_df, toptitle = "Positive Beta value",opacity=1,bottomtitle = "Negative Beta value",
             annotate_p = c(0.00001, 0.00001),file = "cis_all_phenotype",)
 
-phemirror(top=positive_trans_df, bottom =negative_trans_df, toptitle = "PheWAS Example: Data 1",opacity=1,bottomtitle = "PheWAS Example: Data 2",
+phemirror(top=positive_trans_df, bottom =negative_trans_df, toptitle = "Positive Beta value",opacity=1,bottomtitle = "Negative Beta value",
             annotate_p = c(0.00001, 0.00001),file = "trans_all_phenotype",)
 
 
