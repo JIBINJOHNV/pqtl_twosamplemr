@@ -19,7 +19,7 @@ import argparse
 pd.set_option('display.float_format', '{:.2E}'.format)
 print(tempfile.gettempdir())
 
-##File location /edgehpc/dept/human_genetics/users/jjohn1/Outcome_GWAS/iPSYCH_Depression_excl_UKB_23andMe
+##File location /edgehpc/dept/human_genetics/users/jjohn1/Outcome_GWAS/iPSYCH_Depression_excl_UKB_23andMe  ; https://ipsych.dk/en/research/downloads
 os.system("wget https://ipsych.dk/fileadmin/ipsych.dk/Downloads/daner_MDDwoBP_20201001_2015iR15iex_HRC_MDDwoBP_iPSYCH2015i_Wray_FinnGen_MVPaf_2_HRC_MAF01.gz")
 os.system("wget https://ipsych.dk/fileadmin/ipsych.dk/Downloads/Readme_excl_UKB.pdf")
 os.system(f'''zgrep -v "##" {filename} >{filename[:-3]}.tsv''')
