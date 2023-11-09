@@ -18,10 +18,10 @@ negative_trans_df <- trans_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-',
 positive_trans_df <- trans_df %>%filter(Estimate_Direction %in% c('+,NA', '+,+', 'NA,+'))
 
 phemirror(top=positive_cis_df, bottom =negative_cis_df, toptitle = "Positive Beta value",opacity=1,bottomtitle = "Negative Beta value",
-            annotate_p = c(0.00001, 0.00001),file = "cis_all_phenotype",)
+            annotate_p = c(0.000013, 0.000013),file = "cis_all_phenotype",)
 
 phemirror(top=positive_trans_df, bottom =negative_trans_df, toptitle = "Positive Beta value",opacity=1,bottomtitle = "Negative Beta value",
-            annotate_p = c(0.00001, 0.00001),file = "trans_all_phenotype",)
+            annotate_p = c(0.000013, 0.000013),file = "trans_all_phenotype",)
 
 
 combined_df <- rbind(cis_df, trans_df)
@@ -35,7 +35,7 @@ colnames(bip_df)[colnames(bip_df) == "CIS.TRANS"] <- "PHE"
 negative_bip_df <- bip_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-', 'NA,-'))
 positive_bip_df <- bip_df %>%filter(Estimate_Direction %in% c('+,NA', '+,+', 'NA,+'))
 phemirror(top=positive_bip_df, bottom =negative_bip_df,opacity=1,
-            annotate_p = c(0.00001, 0.00001),file = "bipolar_cis_trans",toptitle = "Biploar Positive Beta value",bottomtitle = "Biploar Negative Beta value",)
+            annotate_p = c(0.000013, 0.000013),file = "bipolar_cis_trans",toptitle = "Biploar Positive Beta value",bottomtitle = "Biploar Negative Beta value",)
 
 
 #Cognition
@@ -44,7 +44,7 @@ cog_df <- subset(cog_df, select = -PHE)
 colnames(cog_df)[colnames(cog_df) == "CIS.TRANS"] <- "PHE"
 negative_cog_df <- cog_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-', 'NA,-'))
 positive_cog_df <- cog_df %>%filter(Estimate_Direction %in% c('+,NA', '+,+', 'NA,+'))
-phemirror(top=positive_cog_df, bottom =negative_cog_df,opacity=1,annotate_p = c(0.00001, 0.00001),
+phemirror(top=positive_cog_df, bottom =negative_cog_df,opacity=1,annotate_p = c(0.000013, 0.000013),
             file = "cognition_cis_trans",toptitle = "Cognition Positive Beta value",bottomtitle = "Cognition Negative Beta value",)
 
 ##Depression
@@ -53,7 +53,7 @@ dep_df <- subset(dep_df, select = -PHE)
 colnames(dep_df)[colnames(dep_df) == "CIS.TRANS"] <- "PHE"
 negative_dep_df <- dep_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-', 'NA,-'))
 positive_dep_df <- dep_df %>%filter(Estimate_Direction %in% c('+,NA', '+,+', 'NA,+'))
-phemirror(top=positive_dep_df, bottom =negative_dep_df,opacity=1,annotate_p = c(0.00001, 0.00001),
+phemirror(top=positive_dep_df, bottom =negative_dep_df,opacity=1,annotate_p = c(0.000013, 0.000013),
                 file = "depression_cis_trans",toptitle = "Depression Positive Beta value",bottomtitle = "Depression Negative Beta value",)
 
 
@@ -64,6 +64,6 @@ colnames(scz_df)[colnames(scz_df) == "CIS.TRANS"] <- "PHE"
 
 negative_scz_df <- scz_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-', 'NA,-'))
 positive_scz_df <- scz_df %>%filter(Estimate_Direction %in% c('+,NA', '+,+', 'NA,+'))
-phemirror(top=positive_scz_df, bottom =negative_scz_df,opacity=1,annotate_p = c(0.00001, 0.00001),
+phemirror(top=positive_scz_df, bottom =negative_scz_df,opacity=1,annotate_p = c(0.000013, 0.000013),
                     file = "scz_cis_trans",toptitle = "Schizophrenia Positive Beta value",bottomtitle = "Schizophrenia Negative Beta value",)
 
