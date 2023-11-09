@@ -4,7 +4,7 @@ import pandas as pd
 def to_scientific(num):
     return '{:.2e}'.format(num)
 
-df=pd.read_excel("MR_Supplemetary_Table_New.xlsx",sheet_name="Sheet3")
+df=pd.read_excel("MR_Supplemetary_Table_New.xlsx",sheet_name="Sheet11")
 
 df2=df[['Gene symbol', 'CIS/TRANS','Outcome','Estimate_Direction','Lowest_Pvalue','FDR_P_value','BONF_P_Value']]
 df2=df2[~df2['Estimate_Direction'].isin(['+,-','-,+'])]
