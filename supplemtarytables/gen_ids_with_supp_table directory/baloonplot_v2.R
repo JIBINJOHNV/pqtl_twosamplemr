@@ -1,8 +1,11 @@
 library(glue)
+library(dplyr)
+library(ggplot2)
 
 df_filtered=read.csv("Alll_pheeotype_cis_trans_bonf.csv")
 colnames(df_filtered)[colnames(df_filtered) == "Estimate_Direction"] <- "Direction"
 df_filtered <- df_filtered[order(df_filtered$Gene), ]
+
 
 ### All CIS PQTLS
 cis=df_filtered[df_filtered$`CIS.TRANS`=="CIS", ]
