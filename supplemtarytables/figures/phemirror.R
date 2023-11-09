@@ -301,8 +301,8 @@ phemirror<-function (top, bottom, phegroup, tline, bline, chroms = c(1:22,
 
 
     # Add horizontal lines at y = 5
-    p1 <- p1 + geom_hline(yintercept = 5, color = "#848586", alpha = 0.3)  # Customize the color as needed
-    p2 <- p2 + geom_hline(yintercept = 5, color = "#848586", alpha = 0.3)  # Customize the color as needed
+    #p1 <- p1 + geom_hline(yintercept = 5, color = "#848586", alpha = 0.3)  # Customize the color as needed
+    #p2 <- p2 + geom_hline(yintercept = 5, color = "#848586", alpha = 0.3)  # Customize the color as needed
 
 
     print(paste0("Saving plot to ", file, ".", type))
