@@ -1,6 +1,7 @@
 
 import pandas as pd
 import numpy as np
+import math
 
 
 meta_df=pd.read_csv(f"/Users/jibinjohn/Desktop/MR_Analysis_Results_with_SCZ_NoUKB_Cognition_sup_table/supplementary_Tablees/Decode_Biogen_CisExposure_TransExposureNoMHC_suppelementary_table_withGeneInfo.csv")
