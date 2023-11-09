@@ -234,18 +234,18 @@ phemirror<-function (top, bottom, phegroup, tline, bline, chroms = c(1:22,
             print("Consider installing 'ggrepel' for improved text annotation")
             p1 <- p1 + geom_text(data = d_order[d_order$pvalue < 
                 annotate_p[1] & d_order$Location == "Top", ], 
-                aes(pos_index, pval, label = SNP),size = 1.8,fontface ="bold",max.overlaps = 100)
+                aes(pos_index, pval, label = SNP),size = 1.5,fontface ="bold",max.overlaps = 100)
             p2 <- p2 + geom_text(data = d_order[d_order$pvalue < 
                 annotate_p[2] & d_order$Location == "Bottom", 
-                ], aes(pos_index, pval, label = SNP),size = 1.8,fontface ="bold",max.overlaps = 100)
+                ], aes(pos_index, pval, label = SNP),size = 1.5,fontface ="bold",max.overlaps = 100)
         }
         else {
             p1 <- p1 + ggrepel::geom_text_repel(data = d_order[d_order$pvalue < 
                 annotate_p[1] & d_order$Location == "Top", ], 
-                aes(pos_index, pval, label = SNP),size = 1.8,fontface ="bold",max.overlaps = 100)
+                aes(pos_index, pval, label = SNP),size = 1.5,fontface ="bold",max.overlaps = 100)
             p2 <- p2 + ggrepel::geom_text_repel(data = d_order[d_order$pvalue < 
                 annotate_p[2] & d_order$Location == "Bottom", 
-                ], aes(pos_index, pval, label = SNP),size = 1.8,fontface ="bold",max.overlaps = 100)
+                ], aes(pos_index, pval, label = SNP),size = 1.5,fontface ="bold",max.overlaps = 100)
         }
     }
     if (!missing(annotate_snp)) {
@@ -254,18 +254,18 @@ phemirror<-function (top, bottom, phegroup, tline, bline, chroms = c(1:22,
             print("Consider installing 'ggrepel' for improved text annotation")
             p1 <- p1 + geom_text(data = d_order[d_order$SNP %in% 
                 annotate_snp & d_order$Location == "Top", ], 
-                aes(pos_index, pval, label = SNP),size = 1.8,fontface ="bold")
+                aes(pos_index, pval, label = SNP),size = 1.5,fontface ="bold")
             p2 <- p2 + geom_text(data = d_order[d_order$SNP %in% 
                 annotate_snp & d_order$Location == "Bottom", 
-                ], aes(pos_index, pval, label = SNP),size = 1.8,fontface ="bold")
+                ], aes(pos_index, pval, label = SNP),size = 1.5,fontface ="bold")
         }
         else {
             p1 <- p1 + ggrepel::geom_text_repel(data = d_order[d_order$SNP %in% 
                 annotate_snp & d_order$Location == "Top", ], 
-                aes(pos_index, pval, label = SNP),size = 1.8,fontface ="bold")
+                aes(pos_index, pval, label = SNP),size = 1.5,fontface ="bold")
             p2 <- p2 + ggrepel::geom_text_repel(data = d_order[d_order$SNP %in% 
                 annotate_snp & d_order$Location == "Bottom", 
-                ], aes(pos_index, pval, label = SNP),size = 1.8,fontface ="bold")
+                ], aes(pos_index, pval, label = SNP),size = 1.5,fontface ="bold")
         }
     }
     p1 <- p1 + ylab(yaxislab1)
