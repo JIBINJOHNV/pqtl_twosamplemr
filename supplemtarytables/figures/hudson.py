@@ -18,10 +18,10 @@ negative_trans_df <- trans_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-',
 positive_trans_df <- trans_df %>%filter(Estimate_Direction %in% c('+,NA', '+,+', 'NA,+'))
 
 phemirror(top=positive_cis_df, bottom =negative_cis_df, toptitle = "Positive Beta value",opacity=1,bottomtitle = "Negative Beta value",
-            annotate_p = c(0.000013, 0.000013),file = "cis_all_phenotype",)
+            annotate_p = c(0.0000135, 0.0000135),file = "cis_all_phenotype",)
 
 phemirror(top=positive_trans_df, bottom =negative_trans_df, toptitle = "Positive Beta value",opacity=1,bottomtitle = "Negative Beta value",
-            annotate_p = c(0.000013, 0.000013),file = "trans_all_phenotype",)
+            annotate_p = c(0.00001, 0.00001),file = "trans_all_phenotype",)
 
 
 combined_df <- rbind(cis_df, trans_df)
