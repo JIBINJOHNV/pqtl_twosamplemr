@@ -1,6 +1,8 @@
 import pandas as pd 
 import numpy as np
 
+##/Users/jibinjohn/Desktop/MR_Analysis_Results_with_SCZ_NoUKB_Cognition_sup_table/Forestplots
+
 df=pd.read_csv("Decode_Biogen_CisExposure_TransExposureNoMHC_suppelementary_table2_withGeneInfo.csv")
 #df=df[["Approved symbol","DECODE_gene_name","UKBB_PPP_gene_name","UniProt_ID","HGNC"]].drop_duplicates()
 ukb_df=df[["Approved symbol","UKBB_PPP_Protein","UniProt_ID","HGNC","UKBB_PPP_exposure"]].drop_duplicates() ## UKBB_PPP_Protein UKBB_PPP_gene_name  ,"UKBB_PPP_exposure"
