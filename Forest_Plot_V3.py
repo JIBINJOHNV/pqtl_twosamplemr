@@ -7,7 +7,7 @@ import forestplot as fp
 
 #https://github.com/LSYS/forestplot
 
-pvalue_cutof=0.001
+pvalue_cutof=0.01
 decimal_places = 2
 
 # file location :/Users/jibinjohn/Desktop/MR_Analysis_Results_with_SCZ_NoUKB_Cognition_sup_table/Forestplots/New_ForestPlots
