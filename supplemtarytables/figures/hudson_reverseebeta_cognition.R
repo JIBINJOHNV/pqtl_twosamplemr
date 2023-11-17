@@ -9,11 +9,12 @@ trans_df=read.csv('Decode_Biogen_TransExposure_all_phenotype_hudson_input.csv')
 negative_cis_df <- cis_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-', 'NA,-'))
 positive_cis_df <- cis_df %>%filter(Estimate_Direction %in% c('+,NA', '+,+', 'NA,+'))
 
-negative_cis_df_cog=negative_cis_df[negative_cis_df$PHE=="Cognition",]
-negative_cis_df_nocog=negative_cis_df[negative_cis_df$PHE!="Cognition",]
+##If CTP already reversed no need to do this
+negative_cis_df_cog=negative_cis_df[negative_cis_df$PHE=="CTP",]
+negative_cis_df_nocog=negative_cis_df[negative_cis_df$PHE!="CTP",]
 
-positive_cis_df_cog=positive_cis_df[positive_cis_df$PHE=="Cognition",]
-positive_cis_df_nocog=positive_cis_df[positive_cis_df$PHE!="Cognition",]
+positive_cis_df_cog=positive_cis_df[positive_cis_df$PHE=="CTP",]
+positive_cis_df_nocog=positive_cis_df[positive_cis_df$PHE!="CTP",]
 
 negative_cis_df<-rbind(negative_cis_df_nocog,positive_cis_df_cog)
 positive_cis_df<-rbind(positive_cis_df_nocog,negative_cis_df_cog)
@@ -26,12 +27,12 @@ negative_trans_df <- trans_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-',
 positive_trans_df <- trans_df %>%filter(Estimate_Direction %in% c('+,NA', '+,+', 'NA,+'))
 
 
+##If CTP already reversed no need to do this
+negative_trans_df_cog=negative_trans_df[negative_trans_df$PHE=="CTP",]
+negative_trans_df_nocog=negative_trans_df[negative_trans_df$PHE!="CTP",]
 
-negative_trans_df_cog=negative_trans_df[negative_trans_df$PHE=="Cognition",]
-negative_trans_df_nocog=negative_trans_df[negative_trans_df$PHE!="Cognition",]
-
-positive_trans_df_cog=positive_trans_df[positive_trans_df$PHE=="Cognition",]
-positive_trans_df_nocog=positive_trans_df[positive_trans_df$PHE!="Cognition",]
+positive_trans_df_cog=positive_trans_df[positive_trans_df$PHE=="CTP",]
+positive_trans_df_nocog=positive_trans_df[positive_trans_df$PHE!="CTP",]
 
 negative_trans_df<-rbind(negative_trans_df_nocog,positive_trans_df_cog)
 positive_trans_df<-rbind(positive_trans_df_nocog,negative_trans_df_cog)
