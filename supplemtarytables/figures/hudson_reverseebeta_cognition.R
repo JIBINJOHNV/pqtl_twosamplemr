@@ -55,4 +55,4 @@ colnames(cog_df)[colnames(cog_df) == "CIS.TRANS"] <- "PHE"
 negative_cog_df <- cog_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-', 'NA,-'))
 positive_cog_df <- cog_df %>%filter(Estimate_Direction %in% c('+,NA', '+,+', 'NA,+'))
 phemirror(bottom=positive_cog_df, top =negative_cog_df,opacity=1,annotate_p = c(0.0000135, 0.0000135),
-            file = "cognition_cis_trans",toptitle = "Cognition Positive Beta value",bottomtitle = "Cognition Negative Beta value",)
+            file = "cognition_cis_trans_Beta_Reversed",toptitle = "CTP Positive Beta value",bottomtitle = "CTP Negative Beta value",)
