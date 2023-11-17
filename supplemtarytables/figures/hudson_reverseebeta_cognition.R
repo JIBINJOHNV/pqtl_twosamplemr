@@ -38,7 +38,7 @@ positive_trans_df<-rbind(positive_trans_df_nocog,negative_trans_df_cog)
 
 
 
-seed=500
+seed=100
 
 phemirror(top=positive_cis_df, bottom =negative_cis_df, toptitle = "Positive Beta value",opacity=1,bottomtitle = "Negative Beta value",
             annotate_p = c(0.0000135, 0.0000135),file = "cis_all_phenotype",)
