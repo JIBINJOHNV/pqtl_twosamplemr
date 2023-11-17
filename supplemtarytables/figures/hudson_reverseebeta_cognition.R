@@ -38,7 +38,7 @@ positive_trans_df<-rbind(positive_trans_df_nocog,negative_trans_df_cog)
 
 
 
-seed=100
+seed=305
 
 phemirror(top=positive_cis_df, bottom =negative_cis_df, toptitle = "Positive Beta value",opacity=1,bottomtitle = "Negative Beta value",
             annotate_p = c(0.0000135, 0.0000135),file = "cis_all_phenotype",)
@@ -49,7 +49,7 @@ phemirror(top=positive_trans_df, bottom =negative_trans_df, toptitle = "Positive
 combined_df <- rbind(cis_df, trans_df)
 
 #Cognition
-cog_df=combined_df[combined_df$PHE=="Cognition", ]
+cog_df=combined_df[combined_df$PHE=="CTP", ]
 cog_df <- subset(cog_df, select = -PHE)
 colnames(cog_df)[colnames(cog_df) == "CIS.TRANS"] <- "PHE"
 negative_cog_df <- cog_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-', 'NA,-'))
