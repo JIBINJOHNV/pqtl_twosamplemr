@@ -4,11 +4,11 @@ library(ggplot2)
 
 df_filtered=read.csv("Alll_pheeotype_cis_trans_bonf_01_onlyGT2.csv")
 
-df_filtered$Estimate_Direction <- ifelse(df_filtered$Phenotype == "COG" & df_filtered$Estimate_Direction == "+", "-", 
-                                          ifelse(df_filtered$Phenotype == "COG" & df_filtered$Estimate_Direction == "-", "+",
+df_filtered$Estimate_Direction <- ifelse(df_filtered$Phenotype == "CTP" & df_filtered$Estimate_Direction == "+", "-", 
+                                          ifelse(df_filtered$Phenotype == "CTP" & df_filtered$Estimate_Direction == "-", "+",
                                                   df_filtered$Estimate_Direction))
 
-colnames(df_filtered)[colnames(df_filtered) == "Estimate_Direction"] <- "Direction"
+colnames(df_filtered)[colnames(df_filtered) == "Estimate_Direction"] <- "MDD"
 df_filtered <- df_filtered[order(df_filtered$Gene), ]
 
 write.csv(df_filtered,"Alll_pheeotype_cis_trans_bonf_01_onlyGT2.csv",row.names=FALSE)
