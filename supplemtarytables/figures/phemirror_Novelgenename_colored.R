@@ -312,26 +312,6 @@ phemirror<-function (top, bottom, phegroup, tline, bline, chroms = c(1:22,
     p2 <- p2 + ggrepel::geom_text_repel(data = d_order[!is.na(d_order$SNP2) & d_order$Location == "Bottom", 
         ], aes(pos_index, pval, label = SNP2),size = 1.4,fontface ="bold",color="red",,max.overlaps = 100)
 
-
-tryCatch({
-   p1 <- p1 + ggrepel::geom_text_repel(data = d_order[!is.na(d_order$SNP3) & d_order$Location == "Top", ], 
-       aes(pos_index, pval, label = SNP3),size = 1.4,fontface ="bold",color="#251bbb",,max.overlaps = 100)
-   }, error = function(e) {
-   # Error handling code
-   cat("An error occurred:", conditionMessage(e), "\n")
-   # Optionally, you can add code here to handle or log the error
-   })
-
-tryCatch({
-   p2 <- p2 + ggrepel::geom_text_repel(data = d_order[!is.na(d_order$SNP3) & d_order$Location == "Bottom", 
-       ], aes(pos_index, pval, label = SNP3),size = 1.4,fontface ="bold",color="#251bbb",,max.overlaps = 100)
-   }, error = function(e) {
-   # Error handling code
-   cat("An error occurred:", conditionMessage(e), "\n")
-   # Optionally, you can add code here to handle or log the error
-   })
-
-
 head(d_order)
     print(paste0("Saving plot to ", file, ".", type))
     p <- grid.arrange(arrangeGrob(p1, top = toptitle), arrangeGrob(p2, 
@@ -341,3 +321,6 @@ head(d_order)
         units = "in", height = hgt, width = wi)
     return(p)
 }
+
+
+seed=305
