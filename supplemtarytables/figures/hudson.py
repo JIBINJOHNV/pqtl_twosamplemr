@@ -48,7 +48,7 @@ phemirror(top=positive_cog_df, bottom =negative_cog_df,opacity=1,annotate_p = c(
             file = "cognition_cis_trans",toptitle = "Positive Beta value",bottomtitle = "Negative Beta value",)
 
 ##Depression
-dep_df=combined_df[combined_df$PHE=="Depression", ]
+dep_df=combined_df[combined_df$PHE=="MDD", ]
 dep_df <- subset(dep_df, select = -PHE)
 colnames(dep_df)[colnames(dep_df) == "CIS.TRANS"] <- "PHE"
 negative_dep_df <- dep_df %>%filter(Estimate_Direction %in% c('-,NA', '-,-', 'NA,-'))
