@@ -228,6 +228,9 @@ decod_rename_columns={'DECODE_BritishMR-IVWDelta_Model':'DECODE_Model',     'DEC
                       'DECODE_BritishMR-IVWDelta_RSE':'DECODE_RSE',         'DECODE_BritishMR-IVWDelta_Heter.Stat':'DECODE_Heter.Stat'}
 
 
+Results_df2=Results_df2.rename(columns=ukb_rename_columns)
+Results_df2=Results_df2.rename(columns=decod_rename_columns)
+
 Results_df2.to_csv("TwoSampleMR_BritishMR_SCZ_BIP_MDD_CTP_Analaysis_SelectedMethods_SuppTable2.csv",index=None)
 
 
