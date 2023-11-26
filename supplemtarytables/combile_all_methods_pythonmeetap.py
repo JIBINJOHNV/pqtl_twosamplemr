@@ -1,6 +1,8 @@
 
 
 import pandas as pd 
+from scipy.stats import combine_pvalues
+import numpy as np
 
 uk_common_columns=['Approved symbol','UKBB_PPP_Protein','UniProt_ID','HGNC','UKBB_PPP_exposure','Gene_Symbol','outcome','exposure','CIS/TRANS']
 
@@ -205,14 +207,14 @@ het_cols=['TwoSampleMR_heterogeneity_Q_Ivw(Fixedeffects)','TwoSampleMR_heterogen
 ukb_ivw_het_cols=["UKB-PPP_"+x for x in het_cols]
 decode_het_cols=["Decode_"+x for x in het_cols]
 
-
 ukb_ivw_hpleio_cols=["UKB-PPP_"+x for x in hpleio]
 decode_hpleio_cols=["Decode_"+x for x in hpleio]
 
+ukb_ivw_two_smr_cols=["UKB-PPP_"+x for x in two_smr_cols]
+decode_two_smr_cols=["Decode_"+x for x in two_smr_cols]
+
 last_columns=['platform_Decode','seqid_Decode','oid_UKBB-PPP','platform_UKBB-PPP','UKBB_PPP_exposure',"DECODE_exposure"]
-
-selectd_cols=common_cols+ukb_ivw_dlta_cols+ukb_snp_cols+decode_ivw_dlta_cols+decode_snp_cols+ukb_ivw_het_cols+decode_het_cols+ukb_ivw_hpleio_cols+decode_hpleio_cols+last_columns
-
+selectd_cols=common_cols+ukb_ivw_dlta_cols+ukb_snp_cols+decode_ivw_dlta_cols+decode_snp_cols+ukb_ivw_het_cols+decode_het_cols+ukb_ivw_hpleio_cols+decode_hpleio_cols+ukb_ivw_two_smr_cols+decode_two_smr_cols+last_columns
 Results_df2=Results_df2[selectd_cols]
 
 ukb_rename_columns={'UKB-PPP_BritishMR-IVWDelta_Model':'UKB-PPP_Model',      'UKB-PPP_BritishMR-IVWDelta_Pvalue':'UKB-PPP_Pvalue',           'UKB-PPP_BritishMR-IVWDelta_Beta':'UKB-PPP_Estimate', 'UKB-PPP_BritishMR-IVWDelta_SE':'UKB-PPP_StdError', 
